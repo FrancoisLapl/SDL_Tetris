@@ -1,0 +1,27 @@
+touches utilisées selon le contexte
+-flèche haut
+-flèche bas
+-flèche droite
+-flèche gauche
+-bouton espace
+-bouton escape
+
+liste des contextes
+-jeux
+-menu principal
+-jeux en pause
+
+
+structures
+-grille -nombre cases hauteur
+	-nombre cases largeur
+-forme ->aggrégat carré
+-carré 
+-contexte présent
+-gestionnaire de jeux
+-pointage
+
+structure de données a concevoir
+-liste dynamique
+
+
