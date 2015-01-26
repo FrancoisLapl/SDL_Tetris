@@ -1,3 +1,6 @@
+# vim swapfiles
+.*.swp
+
 # Object files
 *.o
 *.ko
