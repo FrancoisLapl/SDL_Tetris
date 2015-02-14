@@ -1,9 +1,13 @@
-CC=gcc-4.8
-CFLAGS= -c -Wall
+.PHONY: clean
+
+CC=gcc
+CFLAGS= -c -Wall #-M pourait être utile
 LDFLAGS= -framework SDL2
-SOURCES=main.c tetris.c 
-OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLENAME=Tetris
+SRCDIR= src/
+FILES= main.c DynamicList.c 
+SOURCES= $(addprefix $(SRCDIR),$(FILES))
+OBJECTS= $(SOURCES:.c=.o)
+EXECUTABLENAME= Tetris
 
 all: $(SOURCES) $(EXECUTABLENAME)
 
@@ -13,5 +17,6 @@ $(EXECUTABLENAME): $(OBJECTS)
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
 clean:
-	rm -f $(EXECUTABLENAME) $(OBJECTS) 
-
+	rm -f $(EXECUTABLENAME) $(OBJECTS) ./$(EXECUTABLENAME).s
+outputASM:
+	gobjdump -d ./$(EXECUTABLENAME) > $(EXECUTABLENAME).s 
