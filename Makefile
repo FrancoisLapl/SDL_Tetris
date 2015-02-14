@@ -18,5 +18,9 @@ $(EXECUTABLENAME): $(OBJECTS)
 	$(CC) $(CFLAGS) $< -o $@
 clean:
 	rm -f $(EXECUTABLENAME) $(OBJECTS) ./$(EXECUTABLENAME).s
+
 outputASM:
 	gobjdump -d ./$(EXECUTABLENAME) > $(EXECUTABLENAME).s 
+
+valgrind:
+	valgrind ./$(EXECUTABLENAME)
