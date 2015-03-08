@@ -14,7 +14,7 @@ static void resizeList(DynamicList *list, int multiple)
 	
 	int newSize;	
 	
-	if (multiple > 0)
+	if (multiple > 0) // if the multiple is 0 or lower we compact the list isted of extendind his size
 		newSize = list->length * multiple;
 	else newSize = list->count * list->objectSize;
 
@@ -80,6 +80,7 @@ void insertAt(DynamicList *list, int index, const void *inObject)
 
 	void *destination = list->elements + ((index + 1) * list->objectSize);
 	void *source = destination - list->objectSize;
+
 	int size = list->objectSize*(list->count - index + 1);
 
 	memmove(destination, source, size);	
@@ -141,4 +142,11 @@ void deleteList(DynamicList *list, void (*cleanFunction)(void *object))
 	free(list->elements);
 
 	return;
+}
+
+void printListInfo(DynamicList *list)
+{
+	printf("le count est %d, Le elements pointer est %d,le objectSize est %d,le length est %d \n",list->count
+			                                                                             ,(int)list->elements                                                                                                                                      ,list->objectSize
+												     ,list->length);
 }

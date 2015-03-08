@@ -4,27 +4,30 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "DynamicList.h"
+#include "test.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
 SDL_Window* window = NULL;
 SDL_Surface* surface = NULL;
+SDL_Renderer* renderer = NULL;
 
 bool initSDL()
 {
 	bool success = true;
-	if(SDL_Init(SDL_INIT_VIDEO)<0){
+	if(SDL_Init(SDL_INIT_VIDEO) < 0){
 		printf("SDL Init returned error, abording now. SDL_Error: %s\n", SDL_GetError());
 		success = false;
 	} else {
-		window = SDL_CreateWindow( "Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			       		   SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( window == 	NULL ){
+		window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+			       		   SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		if(window == NULL){
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			success = false;
 		} else	{							
-			surface = SDL_GetWindowSurface( window );
+			surface = SDL_GetWindowSurface(window);
+			renderer = SDL_CreateSoftwareRenderer(window);
 		}
 	}
 	 
@@ -44,48 +47,15 @@ void close()
 
 int main()
 {
-	DynamicList list;	
-	initialize(&list,sizeof(int),NULL,10);	
-	int idx;
-	
-	for(idx = 0; idx < 30;idx++){
-		
-		push(&list,&idx);
+	if(false){
+		runTests();
+		return 0;
 	}
-
-	int b = 1111123132;
-	int c = 3214343333;
-	insertAt(&list,22,&b);
-	insertAt(&list,22,&c);
-
-	printf("le count est %d, Le elements pointer est %d,le objectSize est %d,le length est %d \n",list.count
-												     ,(int)list.elements
-												     ,list.objectSize
-												     ,list.length);
-	int i;
-	for( i = -1; i <= 31; i++){
-		int temp = 0;
-		getAt(&list,i,&temp);
-		printf("int at %d = %d \n",i ,temp);	
-	}
-	deleteList(&list,NULL);	
-	
-	return 0;
 
 	if(!initSDL()){
 		printf("Failed to initialized!\n");
 	} else {
-		bool quit = false;
-		SDL_Event e;
-
-		while(!quit){
-			while(SDL_PollEvent(&e) != 0){
-				if(e.type == SDL_QUIT){
-					quit = true;
-				}
-			}
-			SDL_UpdateWindowSurface(window);
-		}
+		runGameLoop(&window, &surface);
 	}
 
 	close();

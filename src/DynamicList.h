@@ -24,6 +24,7 @@ void push(DynamicList *list, const void *object);
 /*void pop(DynamicList *list, void *outObject);
 void sort(DynamicList *list, void(*compareFunction)(void *objectA,void *objectB), EnuSortAlgorithm sortType);
 */
+void printListInfo(DynamicList *list);
 void deleteList(DynamicList *list, void(*cleanFunction)(void *object));
 #endif
 
