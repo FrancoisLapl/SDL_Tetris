@@ -1,6 +1,6 @@
 #include "GameEngine.h"
 
-void runGameLoop(SDL_Window *window,SDL_Surface *surface)
+void runGameLoop(SDL_Window* window,SDL_Renderer* renderer)
 {
 
 	bool quit = false;
@@ -12,6 +12,5 @@ void runGameLoop(SDL_Window *window,SDL_Surface *surface)
 				quit = true;
 		       	}   
 		}   
-		SDL_UpdateWindowSurface(window);
 	}   
 }

@@ -4,6 +4,6 @@
 #include <SDL2/SDL.h>
 #include "DynamicList.h"
 
-void runGameLoop();
+void runGameLoop(SDL_Window* window,SDL_Renderer* renderer);
 
 #endif
