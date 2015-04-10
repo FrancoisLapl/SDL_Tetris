@@ -15,7 +15,7 @@ SDL_Renderer* renderer = NULL;
 
 bool initSDL()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0){
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0){
 		fprintf(stderr, "SDL Init returned error. Stopping the Tetris. Error(s): %s\n", SDL_GetError());
 		return false;
 	} 
@@ -27,13 +27,14 @@ bool initSDL()
 		return false;
 	}
 
-	renderer = SDL_CreateRenderer(window,-1,0);
+	renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
 			
 	if (renderer == NULL){
 		fprintf(stderr, "\nUnable to create the main renderer. Stopping the Tetris. Error(s):  %s\n", SDL_GetError());
 		return false;
 	}
-	 
+	
+	SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 	return true;
 }
 
