@@ -1,7 +1,7 @@
 .PHONY: clean clearscreen
 
 CC=gcc
-OBJDUMP=
+OBJDUMP=NO_OBJDUMP_IS_DECLARED
 CFLAGS= -c -Wall #-M pourait être utile
 LDFLAGS=
 SRCDIR= src/
@@ -19,19 +19,19 @@ ifeq ($(UNAME_S),Linux)
 	LDFLAGS +=$(SDL_FLAGS) $(SDL_LDFLAGS)
 	LONG_EXE_NAME = $(addsuffix 4Linux, $(EXE_NAME))
 	OBJDUMP=objdump
-	CMD_CLEA_SCREEN=clear
+	CMD_CLEAR_SCREEN=clear
 endif
 ifeq ($(UNAME_S),Darwin)
 	LDFLAGS += -framework SDL2
 	LONG_EXE_NAME = $(addsuffix 4Mac, $(EXE_NAME))
 	OBJDUMP= gobjdump
-	CMD_CLEA_SCREEN=clear
+	CMD_CLEAR_SCREEN=clear
 endif
-ifeq (,$(findstring MINGW,$(uname_S)))
+ifeq ("MINGW",$(UNAME_S))
 	LDFLAGS += -lmingw32 -lSDL2main -lSDL2
 	LONG_EXE_NAME = $(addsuffix 4Win, $(EXE_NAME))
 	OBJDUMP=objdump
-	CMD_CLEA_SCREEN=cls 
+	CMD_CLEAR_SCREEN=cls 
 endif
 
 all: $(SOURCES) $(LONG_EXE_NAME)
@@ -52,4 +52,4 @@ valgrind:
 	valgrind ./$(LONG_EXE_NAME)
 
 clearscreen:
-	$(CMD_CLEA_SCREEN)
+	$(CMD_CLEAR_SCREEN)
