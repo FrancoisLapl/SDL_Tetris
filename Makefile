@@ -5,7 +5,7 @@ OBJDUMP=NO_OBJDUMP_IS_DECLARED
 CFLAGS= -c -Wall #-M pourait être utile
 LDFLAGS=
 SRCDIR= src/
-FILES= main.c DynamicList.c test.c GameEngine.c
+FILES= TetrisGraphicEngine.c EventManager.c main.c DynamicList.c test.c GameEngine.c
 SOURCES= $(addprefix $(SRCDIR),$(FILES))
 OBJECTS= $(SOURCES:.c=.o)
 EXE_NAME= Tetris
