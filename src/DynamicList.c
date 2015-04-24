@@ -57,9 +57,7 @@ void DL_initialize(DynamicList *list, int objectSize, void (*cleanFunction)(void
 
 void DL_removeAt(DynamicList *list, int index)
 {
-	if(!indexInBound(list, index))
-		return;
-	
+	assert(indexInBound(list,index) == true);	
 	
 	void* destination = list->elements + (index * list->objectSize);
 	void* source = destination + list->objectSize;
