@@ -40,18 +40,22 @@ static bool indexInBound(DynamicList *list, int index)
 	return false;
 }
 
-void initialize(DynamicList *list, int objectSize, void (*cleanFunction)(void *object), int initialSize)
+void DL_initialize(DynamicList *list, int objectSize, void (*cleanFunction)(void *object), int initialSize)
 {
 	assert(objectSize > 0 && initialSize > 0);
 	list->objectSize = objectSize;
 	list->length = initialSize;
 	list->count = 0;
 	list->elements = malloc(objectSize * initialSize);	
-	list->cleanFunction = cleanFunction;
+
+	if (cleanFunction != NULL) {
+		list->cleanFunction = cleanFunction;
+	} else list->cleanFunction = NULL;
+
 	assert(list->elements != NULL);
 }
 
-void removeAt(DynamicList *list, int index)
+void DL_removeAt(DynamicList *list, int index)
 {
 	if(!indexInBound(list, index))
 		return;
@@ -67,7 +71,7 @@ void removeAt(DynamicList *list, int index)
 	compactList(list);
 }
 
-void insertAt(DynamicList *list, int index, const void *inObject)
+void DL_insertAt(DynamicList *list, int index, const void *inObject)
 {
 	if(!indexInBound(list, index)){
 		printf("index %d is out of bound\n", index);
@@ -88,7 +92,7 @@ void insertAt(DynamicList *list, int index, const void *inObject)
 	memcpy(source, inObject, list->objectSize);
 }
 
-void getAt(DynamicList *list, int index, void *outObject)
+void DL_getAt(DynamicList *list, int index, void *outObject)
 {
 	if(!indexInBound(list,index)){
 		printf("index %d is out of bound\n",index);
@@ -99,7 +103,7 @@ void getAt(DynamicList *list, int index, void *outObject)
 	memcpy(outObject, source, list->objectSize);
 }
 
-void push(DynamicList *list, const void *object)
+void DL_push(DynamicList *list, const void *object)
 {
 	if(!hasSpaceLeft(list))
 		resizeList(list,2);
@@ -109,7 +113,7 @@ void push(DynamicList *list, const void *object)
 }
 
 /*
-void pop(DynamicList *list, void *outObject)
+void DL_pop(DynamicList *list, void *outObject)
 {
 	int wordCount = list->objectSize;
 	list->count--;
@@ -123,19 +127,19 @@ void pop(DynamicList *list, void *outObject)
 	return;
 }
 
-void sort(DynamicList *list, void (*compareFunction)(void objectA,void objectB), EnuSortAlgorithm sortType)
+void DL_sort(DynamicList *list, void (*compareFunction)(void objectA,void objectB), EnuSortAlgorithm sortType)
 {
 	
 }
 */
 
-void deleteList(DynamicList *list, void (*cleanFunction)(void *object))
+void DL_deleteList(DynamicList *list)
 {
-	if(cleanFunction != NULL) {
+	if(list->cleanFunction != NULL) {
 		int i;
 		for(i = 0;i <= list->count;i++)
 		{
-			cleanFunction(i * list->objectSize + list->elements);
+			list->cleanFunction(i * list->objectSize + list->elements);
 		}
 	}
 
@@ -144,9 +148,9 @@ void deleteList(DynamicList *list, void (*cleanFunction)(void *object))
 	return;
 }
 
-void printListInfo(DynamicList *list)
+void DL_printListInfo(DynamicList *list)
 {
-	printf("le count est %d, Le elements pointer est %d,le objectSize est %d,le length est %d \n",list->count
-			                                                                             ,(int)list->elements                                                                                                                                      ,list->objectSize
+	printf("le count est %d, le objectSize est %d,le length est %d \n",list->count
+			                                                                             ,list->objectSize
 												     ,list->length);
 }

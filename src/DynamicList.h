@@ -16,16 +16,16 @@ typedef struct{
 	void (*cleanFunction)(void *object);
 } DynamicList;
 
-void initialize(DynamicList *list, int objectSize, void(*cleanFunction)(void *object), int initialSize);
-void removeAt(DynamicList *list, int index);
-void insertAt(DynamicList *list, int index, const void *inObject);
-void getAt(DynamicList *list, int index, void *outObject);
-void push(DynamicList *list, const void *object);
-/*void pop(DynamicList *list, void *outObject);
-void sort(DynamicList *list, void(*compareFunction)(void *objectA,void *objectB), EnuSortAlgorithm sortType);
+void DL_initialize(DynamicList *list, int objectSize, void(*cleanFunction)(void *object), int initialSize);
+void DL_removeAt(DynamicList *list, int index);
+void DL_insertAt(DynamicList *list, int index, const void *inObject);
+void DL_getAt(DynamicList *list, int index, void *outObject);
+void DL_push(DynamicList *list, const void *object);
+/*void DL_pop(DynamicList *list, void *outObject);
+void DL_sort(DynamicList *list, void(*compareFunction)(void *objectA,void *objectB), EnuSortAlgorithm sortType);
 */
-void printListInfo(DynamicList *list);
-void deleteList(DynamicList *list, void(*cleanFunction)(void *object));
+void DL_printListInfo(DynamicList *list);
+void DL_deleteList(DynamicList *list);
 #endif
 
 
