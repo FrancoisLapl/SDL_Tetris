@@ -4,8 +4,15 @@ static void cleanRessources(GameState *gameState){
 	DL_deleteList(&gameState->blockList);
 }
 
+static void cleanBlock(void *elementPointer){
+	assert(elementPointer != NULL);
+
+	Block* pointerToBlock = *((void**)elementPointer);
+	free(pointerToBlock);
+}
+
 static void initializeGameState(GameState *gameState){
-	DL_initialize(&gameState->blockList, sizeof(Block), NULL, 32);
+	DL_initialize(&gameState->blockList, sizeof(Block*), cleanBlock, 32);
 }
 
 void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)

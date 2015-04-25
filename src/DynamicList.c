@@ -92,6 +92,9 @@ void DL_insertAt(DynamicList *list, int index, const void *inObject)
 
 void DL_getAt(DynamicList *list, int index, void *outObject)
 {
+	assert(list != NULL);
+	assert(outObject != NULL);
+
 	if(!indexInBound(list,index)){
 		printf("index %d is out of bound\n",index);
 		return;
@@ -103,6 +106,9 @@ void DL_getAt(DynamicList *list, int index, void *outObject)
 
 void DL_push(DynamicList *list, const void *object)
 {
+	assert(list != NULL);
+	assert(object != NULL);
+
 	if(!hasSpaceLeft(list))
 		resizeList(list,2);
 
@@ -135,7 +141,7 @@ void DL_deleteList(DynamicList *list)
 {
 	if(list->cleanFunction != NULL) {
 		int i;
-		for(i = 0;i <= list->count;i++)
+		for(i = 0;i < list->count;i++)
 		{
 			list->cleanFunction(i * list->objectSize + list->elements);
 		}

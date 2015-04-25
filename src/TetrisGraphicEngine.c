@@ -34,36 +34,35 @@ void renderGame(GameState *gameState){
 	static bool first = true;
 	
 	if (first) {	
-		Block *newKidOnTheBlock = malloc(sizeof(Block));
+		Block *newBlock = malloc(sizeof(Block));
 
-		newKidOnTheBlock->x = 100;
-		newKidOnTheBlock->y = 0;
-		newKidOnTheBlock->color.r = 0;
-		newKidOnTheBlock->color.g = 0;
-		newKidOnTheBlock->color.b = 255;
-		newKidOnTheBlock->color.a = 255;
+		newBlock->x = 100;
+		newBlock->y = 0;
+		newBlock->color.r = 0;
+		newBlock->color.g = 0;
+		newBlock->color.b = 255;
+		newBlock->color.a = 255;
 	
-		assert(newKidOnTheBlock != NULL);
+		assert(newBlock != NULL);
 		assert(&gameState->blockList != NULL);
 
-		DL_push(&gameState->blockList,newKidOnTheBlock);
+		DL_push(&gameState->blockList, &newBlock);
 		first = false;
 	}
-
 	renderBackground(); 
 
 	int i;
 
 	for(i = 0;i < gameState->blockList.count;i++) {
-		Block block;
-		
-		DL_getAt(&gameState->blockList,i,&block);		
-		
-		//block.y--;
+		Block *block;
 
-		DL_removeAt(&gameState->blockList,i);
-		DL_insertAt(&gameState->blockList,i,&block);
-		renderBlock(&block);
+		DL_getAt(&gameState->blockList,i,&block);		
+
+		if(block->y>=600) block->y = 0;
+
+		block->y+=2;
+
+		renderBlock(block);
 	}
 
 	SDL_RenderPresent(sdlRenderer);
