@@ -29,6 +29,7 @@ void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
 	while(!gameState.quitRequested){
 		handleEvent(&gameState, delay);	
 		renderGame(&gameState);
+		SDL_Delay(3);
 	}
 	
 	cleanRessources(&gameState);

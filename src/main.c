@@ -6,14 +6,23 @@
 #include "DynamicList.h"
 #include "GameEngine.h"
 #include "test.h"
-
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+#include "GameConfig.h"
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
-bool initSDL()
+static void initialiseGameConfigurations(){
+	G_GameConfiguration.windowWidth = 450;
+	G_GameConfiguration.windowHeight = 550;
+	G_GameConfiguration.maxFPS = 60;
+	G_GameConfiguration.blockDropsPerSec = 1;
+	G_GameConfiguration.numberOfRows = 10;
+	G_GameConfiguration.numberOfColumns = 20;
+	G_GameConfiguration.levelDifficultyModifier = 0.1;
+	G_GameConfiguration.blockSize = 10;
+}
+
+static bool initSDL()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0){
 		fprintf(stderr, "SDL Init returned error. Stopping the Tetris. Error(s): %s\n", SDL_GetError());
@@ -21,7 +30,7 @@ bool initSDL()
 	} 
 
 	window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			       		   SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+			       		   G_GameConfiguration.windowWidth,G_GameConfiguration.windowHeight, SDL_WINDOW_SHOWN);
 	if (window == NULL){
 		fprintf(stderr, "\nUnable to Create the main window. Stopping the Tetris. Error(s):  %s\n", SDL_GetError());
 		return false;
@@ -34,11 +43,11 @@ bool initSDL()
 		return false;
 	}
 	
-	SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+	SDL_RenderSetLogicalSize(renderer, G_GameConfiguration.windowWidth , G_GameConfiguration.windowHeight);
 	return true;
 }
 
-void closeSDL()
+static void closeSDL()
 {
 	SDL_DestroyRenderer(renderer);
 	renderer = NULL;
@@ -55,7 +64,9 @@ int main()
 		runTests();
 		return 0;
 	}
-
+	
+	initialiseGameConfigurations();
+	
 	if (!initSDL()){
 		fprintf(stderr, "\nUnable to initialize SDL abording tetris :(\n");
 	} else {

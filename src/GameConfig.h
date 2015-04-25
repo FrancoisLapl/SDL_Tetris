@@ -4,7 +4,7 @@
 typedef struct {
 	Uint32 maxFPS;
 	Uint32 maxLevel;
-	Uint32 blockDropPerSec;
+	Uint32 blockDropsPerSec;
 	Uint32 numberOfRows;
 	Uint32 numberOfColumns;
 	Uint32 windowWidth;
