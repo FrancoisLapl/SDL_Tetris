@@ -19,7 +19,7 @@ static void initialiseGameConfigurations(){
 	G_GameConfiguration.numberOfRows = 10;
 	G_GameConfiguration.numberOfColumns = 20;
 	G_GameConfiguration.levelDifficultyModifier = 0.1;
-	G_GameConfiguration.blockSize = 10;
+	G_GameConfiguration.blockSize = 30;
 }
 
 static bool initSDL()

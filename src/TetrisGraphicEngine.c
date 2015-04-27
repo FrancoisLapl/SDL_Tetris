@@ -6,26 +6,35 @@ void initializeGraphicEngine(SDL_Renderer *renderer){
 	sdlRenderer = renderer;
 }
 
-static void generateWall(GameState *gameState, Uint32 startX, Uint32 startY, Uint32 endX, Uint32 endY){
-	int x,y;
-	
-	for(x = startX; x <= endX; x += G_GameConfiguration.blockSize) {
-		for(y = startY; y <= endY; y+= G_GameConfiguration.blockSize) {
-			Block *newBlock = malloc(sizeof(Block));
+static void generateWall(GameState *gameState, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2){
 
-			newBlock->x = x;
-			newBlock->y = y;
-			newBlock->color.r = 165;
-			newBlock->color.g = 165;
-			newBlock->color.b = 165;
-			newBlock->color.a = 1;
-	
-			assert(newBlock != NULL);
-			assert(&gameState->blockList != NULL);
+	assert(gameState != NULL);
 
-			DL_push(&gameState->blockList, &newBlock);
-		}
-	}	
+	int deltaX = x2 - x1;
+	int deltaY = y2 - y1;
+	int error = 0;
+	int deltaError = abs(deltaY / deltaX);
+	int y = y1;
+	
+	int x;
+
+	for(x=x1; x <= x2; x++) {
+		Block *newBlock = malloc(sizeof(Block));
+
+		assert(newBlock != NULL);
+
+		newBlock->x = x * G_GameConfiguration.blockSize;
+		newBlock->y = round(y) * G_GameConfiguration.blockSize;
+		newBlock->color.r = 165;
+		newBlock->color.g = 165;
+		newBlock->color.b = 165;
+		newBlock->color.a = 1;
+		fprintf(stderr," y addr: %d\n", newBlock->y);
+		DL_push(&gameState->blockList, &newBlock);
+		
+		while(error >= 0.5) 
+			y = y + m;
+	}
 }
 
 static void renderBackground(){
@@ -36,14 +45,17 @@ static void renderBackground(){
 static void renderBlock(Block *block){
 	assert(block != NULL);
 
-	SDL_SetRenderDrawColor(sdlRenderer, block->color.r, block->color.g, block->color.b, block->color.a);
+	SDL_SetRenderDrawColor(sdlRenderer, block->color.r
+					  , block->color.g
+					  , block->color.b
+					  , block->color.a);
 
 	SDL_Rect rect;
 	rect.x = block->x;
 	rect.y = block->y;
 
-	rect.w = 50;
-	rect.h = 50;
+	rect.w = G_GameConfiguration.blockSize;
+	rect.h = G_GameConfiguration.blockSize;
 	
 	SDL_RenderFillRect(sdlRenderer, &rect);
 
@@ -51,15 +63,14 @@ static void renderBlock(Block *block){
 					  , block->color.g - 40
 					  , block->color.b - 40
 					  , block->color.a);
-	/*rect.x += 30;
-	rect.y += 30;*/
+
 	SDL_RenderDrawRect(sdlRenderer, &rect);
 }
 
 void renderGame(GameState *gameState){
 	assert(gameState != NULL);
 
-	fprintf(stderr,"rendering\n");
+//	fprintf(stderr,"rendering\n");
 	
 	static bool first = true;
 	
@@ -77,9 +88,9 @@ void renderGame(GameState *gameState){
 		assert(&gameState->blockList != NULL);
 
 		DL_push(&gameState->blockList, &newBlock);
+
 		first = false;
-		generateWall(gameState, 0, 0, 0, 400);
-		generateWall(gameState, 30, 0, 0, 400);
+		generateWall(gameState, 0, 0, 100, 0);
 	}
 
 	renderBackground(); 
@@ -97,4 +108,3 @@ void renderGame(GameState *gameState){
 	SDL_RenderPresent(sdlRenderer);
 
 }
-

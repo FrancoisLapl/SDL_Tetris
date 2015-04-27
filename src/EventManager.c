@@ -4,7 +4,7 @@ void handleEvent(GameState *gameState, Uint32 msDelay){
 	SDL_Event event;
 	bool canPoll = true;
 	
-	fprintf(stderr,"handling events\n");
+//	fprintf(stderr,"handling events\n");
 
 	Uint32 startTime = SDL_GetTicks();
 
