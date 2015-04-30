@@ -11,15 +11,15 @@
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
-static void initialiseGameConfigurations(){
-	G_GameConfiguration.windowWidth = 450;
-	G_GameConfiguration.windowHeight = 550;
-	G_GameConfiguration.maxFPS = 60;
-	G_GameConfiguration.blockDropsPerSec = 1;
-	G_GameConfiguration.numberOfRows = 10;
-	G_GameConfiguration.numberOfColumns = 20;
-	G_GameConfiguration.levelDifficultyModifier = 0.1;
-	G_GameConfiguration.blockSize = 30;
+static void initialiseGameConfigs(){
+	G_GameConfig.windowWidth = 500;
+	G_GameConfig.windowHeight = 550;
+	G_GameConfig.maxFPS = 60;
+	G_GameConfig.blockDropsPerSec = 1;
+	G_GameConfig.numberOfRows = 14;
+	G_GameConfig.numberOfColumns = 12;
+	G_GameConfig.levelDifficultyModifier = 0.1;
+	G_GameConfig.blockSize = 32;
 }
 
 static bool initSDL()
@@ -30,7 +30,7 @@ static bool initSDL()
 	} 
 
 	window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-			       		   G_GameConfiguration.windowWidth,G_GameConfiguration.windowHeight, SDL_WINDOW_SHOWN);
+			       		   G_GameConfig.windowWidth,G_GameConfig.windowHeight, SDL_WINDOW_SHOWN);
 	if (window == NULL){
 		fprintf(stderr, "\nUnable to Create the main window. Stopping the Tetris. Error(s):  %s\n", SDL_GetError());
 		return false;
@@ -43,7 +43,7 @@ static bool initSDL()
 		return false;
 	}
 	
-	SDL_RenderSetLogicalSize(renderer, G_GameConfiguration.windowWidth , G_GameConfiguration.windowHeight);
+	SDL_RenderSetLogicalSize(renderer, G_GameConfig.windowWidth , G_GameConfig.windowHeight);
 	return true;
 }
 
@@ -65,7 +65,7 @@ int main()
 		return 0;
 	}
 	
-	initialiseGameConfigurations();
+	initialiseGameConfigs();
 	
 	if (!initSDL()){
 		fprintf(stderr, "\nUnable to initialize SDL abording tetris :(\n");

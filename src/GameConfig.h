@@ -13,6 +13,6 @@ typedef struct {
 	Uint32 blockSize;
 } GameConfiguration;
 
-GameConfiguration G_GameConfiguration;
+GameConfiguration G_GameConfig;
 
 #endif

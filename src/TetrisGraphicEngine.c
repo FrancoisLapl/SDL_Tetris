@@ -2,47 +2,85 @@
 
 static SDL_Renderer *sdlRenderer;
 
-void initializeGraphicEngine(SDL_Renderer *renderer){
+void initializeGraphicEngine(SDL_Renderer *renderer) {
 	sdlRenderer = renderer;
 }
 
-static void generateWall(GameState *gameState, Uint32 x1, Uint32 y1, Uint32 x2, Uint32 y2){
-
-	assert(gameState != NULL);
-
-	int deltaX = x2 - x1;
-	int deltaY = y2 - y1;
-	int error = 0;
-	int deltaError = abs(deltaY / deltaX);
-	int y = y1;
+Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+	Block *block = malloc(sizeof(Block));
 	
-	int x;
+	assert(block != NULL);
 
-	for(x=x1; x <= x2; x++) {
-		Block *newBlock = malloc(sizeof(Block));
+	block->x = x;
+	block->y = y; 
 
-		assert(newBlock != NULL);
-
-		newBlock->x = x * G_GameConfiguration.blockSize;
-		newBlock->y = round(y) * G_GameConfiguration.blockSize;
-		newBlock->color.r = 165;
-		newBlock->color.g = 165;
-		newBlock->color.b = 165;
-		newBlock->color.a = 1;
-		fprintf(stderr," y addr: %d\n", newBlock->y);
-		DL_push(&gameState->blockList, &newBlock);
-		
-		while(error >= 0.5) 
-			y = y + m;
-	}
+	block->color.r = r;
+	block->color.g = g;
+	block->color.b = b;
+	block->color.a = a;
+	
+	return block;	
 }
 
-static void renderBackground(){
+static void generateWalls(GameState *gameState) {
+
+	assert(gameState != NULL);
+	int i;
+	int topPadding = 20;
+	int leftPadding = 15;
+	
+	// Generate left wall
+	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
+
+		int yPos = topPadding + i * G_GameConfig.blockSize;
+		Block *newBlock = createBlock(leftPadding, yPos
+					     		 , 128
+					     		 , 128
+					     		 , 128
+					     		 , 1);
+		
+		DL_push(&gameState->blockList, &newBlock);
+	}
+	
+	// Generate right wall
+	int rgtWllxPos = leftPadding + (G_GameConfig.numberOfRows - 2) * G_GameConfig.blockSize;
+
+	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
+
+		int yPos = topPadding + i * G_GameConfig.blockSize;
+		Block *newBlock = createBlock(rgtWllxPos, yPos
+					     		 , 128
+					     		 , 128
+					     		 , 128
+					     		 , 1);
+		
+		DL_push(&gameState->blockList, &newBlock);
+	}
+
+	// Generate bottom wall
+	int btmWllyPos = topPadding + G_GameConfig.blockSize * (G_GameConfig.numberOfRows + 1); 
+
+	for(i = 0; i < G_GameConfig.numberOfColumns; i++) {
+
+		int xPos = leftPadding + i * G_GameConfig.blockSize;
+		Block *newBlock = createBlock(xPos, btmWllyPos
+					     	  , 128
+					     	  , 128
+					     	  , 128
+				     		  , 1);
+		
+		DL_push(&gameState->blockList, &newBlock);
+	}
+
+
+}
+
+static void renderBackground() {
 	SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 0);
 	SDL_RenderClear(sdlRenderer);
 }
 
-static void renderBlock(Block *block){
+static void renderBlock(Block *block) {
 	assert(block != NULL);
 
 	SDL_SetRenderDrawColor(sdlRenderer, block->color.r
@@ -54,8 +92,8 @@ static void renderBlock(Block *block){
 	rect.x = block->x;
 	rect.y = block->y;
 
-	rect.w = G_GameConfiguration.blockSize;
-	rect.h = G_GameConfiguration.blockSize;
+	rect.w = G_GameConfig.blockSize;
+	rect.h = G_GameConfig.blockSize;
 	
 	SDL_RenderFillRect(sdlRenderer, &rect);
 
@@ -90,7 +128,7 @@ void renderGame(GameState *gameState){
 		DL_push(&gameState->blockList, &newBlock);
 
 		first = false;
-		generateWall(gameState, 0, 0, 100, 0);
+		generateWalls(gameState);
 	}
 
 	renderBackground(); 
