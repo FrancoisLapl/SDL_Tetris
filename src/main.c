@@ -13,13 +13,13 @@ SDL_Renderer* renderer = NULL;
 
 static void initialiseGameConfigs(){
 	G_GameConfig.windowWidth = 500;
-	G_GameConfig.windowHeight = 550;
-	G_GameConfig.maxFPS = 60;
+	G_GameConfig.windowHeight = 580;
+	G_GameConfig.targetFps = 60;
 	G_GameConfig.blockDropsPerSec = 1;
-	G_GameConfig.numberOfRows = 14;
-	G_GameConfig.numberOfColumns = 12;
+	G_GameConfig.numberOfRows = 21;
+	G_GameConfig.numberOfColumns = 11;
 	G_GameConfig.levelDifficultyModifier = 0.1;
-	G_GameConfig.blockSize = 32;
+	G_GameConfig.blockSize = 25;
 }
 
 static bool initSDL()

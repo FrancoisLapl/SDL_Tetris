@@ -13,6 +13,11 @@ static void cleanBlock(void *elementPointer){
 
 static void initializeGameState(GameState *gameState){
 	DL_initialize(&gameState->blockList, sizeof(Block*), cleanBlock, 32);
+
+	gameState->quitRequested = false;
+	gameState->gameStatus = starting;
+	gameState->currentLevel = 0;
+	gameState->currentScore = 0;
 }
 
 void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
@@ -20,16 +25,30 @@ void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
 	fprintf(stderr, " Error(s) before entering main gameloop: %s\n", SDL_GetError());
 	SDL_ClearError();
 	
-	Uint32 delay = 6;
+	Uint32 loopStartTime = 0;
+	Uint32 elapsedTime = 0;
+	double loopTime = 1000 / G_GameConfig.targetFps; 
+
 	GameState gameState;
-	
+
 	initializeGameState(&gameState);
 	initializeGraphicEngine(renderer);
 
 	while(!gameState.quitRequested){
-		handleEvent(&gameState, delay);	
+		elapsedTime = 0;
+		loopStartTime = SDL_GetTicks();
+
 		renderGame(&gameState);
-		SDL_Delay(3);
+
+	 	elapsedTime = SDL_GetTicks() - loopStartTime;	
+		
+		fprintf(stderr,"rendering time is: %d \n",elapsedTime);
+
+		handleEvent(&gameState,  loopTime - elapsedTime);	
+
+		if ( gameState.gameStatus == starting) {
+			gameState.gameStatus = running;
+		}
 	}
 	
 	cleanRessources(&gameState);

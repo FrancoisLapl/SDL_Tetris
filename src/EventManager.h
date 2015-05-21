@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include "DynamicList.h"
 #include "GameState.h"
+#include "GameConfig.h"
 
 void handleEvent(GameState *gameState, Uint32 msDelay);
 

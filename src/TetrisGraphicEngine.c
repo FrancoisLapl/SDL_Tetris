@@ -30,7 +30,7 @@ static void generateWalls(GameState *gameState) {
 	int leftPadding = 15;
 	
 	// Generate left wall
-	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
+	for(i = 0; i < G_GameConfig.numberOfRows - 1; i++) {
 
 		int yPos = topPadding + i * G_GameConfig.blockSize;
 		Block *newBlock = createBlock(leftPadding, yPos
@@ -43,9 +43,9 @@ static void generateWalls(GameState *gameState) {
 	}
 	
 	// Generate right wall
-	int rgtWllxPos = leftPadding + (G_GameConfig.numberOfRows - 2) * G_GameConfig.blockSize;
+	int rgtWllxPos = leftPadding + G_GameConfig.blockSize * (G_GameConfig.numberOfColumns - 1);
 
-	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
+	for(i = 0; i < G_GameConfig.numberOfRows - 1; i++) {
 
 		int yPos = topPadding + i * G_GameConfig.blockSize;
 		Block *newBlock = createBlock(rgtWllxPos, yPos
@@ -58,7 +58,7 @@ static void generateWalls(GameState *gameState) {
 	}
 
 	// Generate bottom wall
-	int btmWllyPos = topPadding + G_GameConfig.blockSize * (G_GameConfig.numberOfRows + 1); 
+	int btmWllyPos = topPadding + G_GameConfig.blockSize * (G_GameConfig.numberOfRows - 1); 
 
 	for(i = 0; i < G_GameConfig.numberOfColumns; i++) {
 
@@ -71,8 +71,6 @@ static void generateWalls(GameState *gameState) {
 		
 		DL_push(&gameState->blockList, &newBlock);
 	}
-
-
 }
 
 static void renderBackground() {
@@ -108,41 +106,21 @@ static void renderBlock(Block *block) {
 void renderGame(GameState *gameState){
 	assert(gameState != NULL);
 
-//	fprintf(stderr,"rendering\n");
+	fprintf(stderr,"rendering\n");
 	
-	static bool first = true;
-	
-	if (first) {	
-		Block *newBlock = malloc(sizeof(Block));
-
-		newBlock->x = 100;
-		newBlock->y = 0;
-		newBlock->color.r = 0;
-		newBlock->color.g = 0;
-		newBlock->color.b = 255;
-		newBlock->color.a = 255;
-	
-		assert(newBlock != NULL);
-		assert(&gameState->blockList != NULL);
-
-		DL_push(&gameState->blockList, &newBlock);
-
-		first = false;
+	if (gameState->gameStatus == starting) {	
 		generateWalls(gameState);
 	}
 
 	renderBackground(); 
 
 	int i;
-
 	for(i = 0;i < gameState->blockList.count;i++) {
 		Block *block;
 
 		DL_getAt(&gameState->blockList,i,&block);		
-
 		renderBlock(block);
 	}
 
 	SDL_RenderPresent(sdlRenderer);
-
 }

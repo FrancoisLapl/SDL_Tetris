@@ -2,7 +2,7 @@
 #define __GAME_CONFIG_H__
 
 typedef struct {
-	Uint32 maxFPS;
+	Uint32 targetFps;
 	Uint32 maxLevel;
 	Uint32 blockDropsPerSec;
 	Uint32 numberOfRows;

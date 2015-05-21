@@ -17,7 +17,7 @@ typedef struct {
 	Color color;
 } Block;
 
-typedef enum {running,paused,stopped} GameStatus;
+typedef enum {starting, running, paused, stopped} GameStatus;
 
 typedef struct {
 	bool quitRequested;
