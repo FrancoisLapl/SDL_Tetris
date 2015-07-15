@@ -14,7 +14,7 @@ static void resizeList(DynamicList *list, int multiple)
 	
 	int newSize;	
 	
-	if (multiple > 0) // if the multiple is 0 or lower we compact the list isted of extendind his size
+	if (multiple > 0) // if the multiple is 0 or lower we compact the list instead of extendind his size
 		newSize = list->length * multiple;
 	else newSize = list->count * list->objectSize;
 
