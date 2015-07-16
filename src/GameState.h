@@ -17,7 +17,17 @@ typedef struct {
 	Color color;
 } Block;
 
-typedef enum {starting, running, paused, stopped} GameStatus;
+typedef enum { starting, running, paused, stopped } GameStatus;
+
+typedef enum { square, line, leftLShape, rightLShape, tShape, leftSShape, rightShape } ShapeType;
+
+typedef struct {
+	ShapeType type;
+	Block* blockA;
+	Block* blockB;
+	Block* blockC;
+	Block* blockD;
+} TetrisShape;
 
 typedef struct {
 	bool quitRequested;
@@ -25,7 +35,7 @@ typedef struct {
 	Uint32 currentLevel;
 	Uint32 currentScore;
 	DynamicList blockList;
+	TetrisShape tetrisBlk; 
 } GameState;	
-
 
 #endif

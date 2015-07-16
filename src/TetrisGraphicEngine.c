@@ -6,7 +6,7 @@ void initializeGraphicEngine(SDL_Renderer *renderer) {
 	sdlRenderer = renderer;
 }
 
-Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+static Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 	Block *block = malloc(sizeof(Block));
 	
 	assert(block != NULL);
@@ -73,6 +73,17 @@ static void generateWalls(GameState *gameState) {
 	}
 }
 
+static void putTetrisBlock(GameState *gameState) {
+	Block *newBlock = createBlock(xPos, btmWllyPos
+				     	  , 128
+				     	  , 128
+				     	  , 128
+			     		  , 1);
+		
+	DL_push(&gameState->blockList, &newBlock);
+	
+}
+
 static void renderBackground() {
 	SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 0);
 	SDL_RenderClear(sdlRenderer);
@@ -110,6 +121,7 @@ void renderGame(GameState *gameState){
 	
 	if (gameState->gameStatus == starting) {	
 		generateWalls(gameState);
+		putTetrisBlock(gameState);
 	}
 
 	renderBackground(); 
