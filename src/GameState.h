@@ -1,7 +1,8 @@
-#ifndef __Game_State_H__
-#define __Game_State_H__
+#ifndef __GAME_STATE_H__
+#define __GAME_STATE_H__
 
 #include <stdbool.h>
+#include <SDL2/SDL.h>
 #include "DynamicList.h"
 
 typedef struct {
