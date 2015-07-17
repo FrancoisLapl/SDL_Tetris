@@ -9,4 +9,4 @@ Pour compiler</br>
 make all
 </br>
 
-Petit jeu de tetris gossé à la main et écrit en C et utilisant la librairie SDL pour les aspect graphique et son.
+Petit jeu de tetris gossé à la main et écrit en C et utilisant la librairie SDL pour les aspect graphique, son et gestion clavier.
