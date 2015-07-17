@@ -39,7 +39,7 @@ static void generateWalls(GameState *gameState) {
 					     		 , 128
 					     		 , 1);
 		
-		DL_push(&gameState->blockList, &newBlock);
+		DL_push(&gameState->envBlockList, &newBlock);
 	}
 	
 	// Generate right wall
@@ -54,7 +54,7 @@ static void generateWalls(GameState *gameState) {
 					     		 , 128
 					     		 , 1);
 		
-		DL_push(&gameState->blockList, &newBlock);
+		DL_push(&gameState->envBlockList, &newBlock);
 	}
 
 	// Generate bottom wall
@@ -69,16 +69,17 @@ static void generateWalls(GameState *gameState) {
 					     	  , 128
 				     		  , 1);
 		
-		DL_push(&gameState->blockList, &newBlock);
+		DL_push(&gameState->envBlockList, &newBlock);
 	}
 }
 
 static void putTetrisBlock(GameState *gameState) {
-	Block *newBlock = createBlock(xPos, btmWllyPos
-				     	  , 128
-				     	  , 128
-				     	  , 128
-			     		  , 1);
+	
+	Block *newBlock = createBlock(100, 50
+				     	 , 128
+				     	 , 128
+				     	 , 128
+			     		 , 1);
 		
 	DL_push(&gameState->blockList, &newBlock);
 	
@@ -129,8 +130,13 @@ void renderGame(GameState *gameState){
 	int i;
 	for(i = 0;i < gameState->blockList.count;i++) {
 		Block *block;
-
 		DL_getAt(&gameState->blockList,i,&block);		
+		renderBlock(block);
+	}
+
+	for(i = 0;i < gameState->envBlockList.count;i++) {
+		Block *block;
+		DL_getAt(&gameState->envBlockList,i,&block);		
 		renderBlock(block);
 	}
 

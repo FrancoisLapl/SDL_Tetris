@@ -34,6 +34,7 @@ typedef struct {
 	GameStatus gameStatus;
 	Uint32 currentLevel;
 	Uint32 currentScore;
+	DynamicList envBlockList;
 	DynamicList blockList;
 	TetrisShape tetrisBlk; 
 } GameState;	

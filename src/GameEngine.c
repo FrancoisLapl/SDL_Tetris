@@ -2,9 +2,10 @@
 
 static void cleanRessources(GameState *gameState){
 	DL_deleteList(&gameState->blockList);
+	DL_deleteList(&gameState->envBlockList);
 }
 
-static void cleanBlock(void *elementPointer){
+static void freeBlock(void *elementPointer){
 	assert(elementPointer != NULL);
 
 	Block* pointerToBlock = *((void**)elementPointer);
@@ -12,7 +13,8 @@ static void cleanBlock(void *elementPointer){
 }
 
 static void initializeGameState(GameState *gameState){
-	DL_initialize(&gameState->blockList, sizeof(Block*), cleanBlock, 32);
+	DL_initialize(&gameState->blockList, sizeof(Block*), freeBlock, 32);
+	DL_initialize(&gameState->envBlockList, sizeof(Block*), freeBlock, 32);
 
 	gameState->quitRequested = false;
 	gameState->gameStatus = starting;

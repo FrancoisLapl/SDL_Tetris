@@ -7,7 +7,7 @@
 #include "DynamicList.h"
 #include "GameState.h"
 #include "GameConfig.h"
-#include "EventManager.h"
+#include "EventsManager.h"
 #include "TetrisGraphicEngine.h"
 
 void runGameLoop(SDL_Window* window,SDL_Renderer* renderer);
