@@ -1,11 +1,11 @@
 # SDL_Tetris
-Pre-requis</br>
+#Pre-requis</br>
 -librairie SDL2</br>
 -make</br>
 -gcc(Peut changer, mais non testé)</br>
 -objdump(optionnel)</br>
 
-Pour compiler</br>
+#Pour compiler</br>
 make all
 </br>
 
