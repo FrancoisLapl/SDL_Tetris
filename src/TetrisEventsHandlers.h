@@ -3,4 +3,6 @@
 
 #include "GameState.h"
 
+void tickEventHandler();
+
 #endif

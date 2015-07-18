@@ -15,7 +15,7 @@ static void initialiseGameConfigs(){
 	G_GameConfig.windowWidth = 500;
 	G_GameConfig.windowHeight = 580;
 	G_GameConfig.targetFps = 60;
-	G_GameConfig.blockDropsPerSec = 1;
+	G_GameConfig.blockDropDelayMs = 600;
 	G_GameConfig.numberOfRows = 21;
 	G_GameConfig.numberOfColumns = 11;
 	G_GameConfig.levelDifficultyModifier = 0.1;

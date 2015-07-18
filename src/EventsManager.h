@@ -6,6 +6,7 @@
 #include "DynamicList.h"
 #include "GameState.h"
 #include "GameConfig.h"
+#include "TetrisEventsHandlers.h"
 
 void handleEvent(GameState *gameState, Uint32 msDelay);
 

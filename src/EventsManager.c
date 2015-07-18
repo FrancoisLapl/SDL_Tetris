@@ -1,8 +1,8 @@
 #include "EventsManager.h"
 
-//Uint32 time = 1.0/G_GameConfig.blockDropsPerSec;
+Uint32 lastTickTimeStmp = 0;
 
-static void handleKeyEvents() {
+static void handleKeyEvent() {
 	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 	if(currentKeyStates[SDL_SCANCODE_UP]) {
 		fprintf(stderr,"Up\n");
@@ -32,6 +32,17 @@ void handleEvent(GameState *gameState, Uint32 msDelay) {
 		
 		if (elapsedTime >= msDelay) 
 			break;
+		
+		if (gameState->gameStatus == running) {
+			Uint32 deltaTime = lastTickTimeStmp - SDL_GetTicks();
+			
+			if (deltaTime >= G_GameConfig.blockDropDelayMs) {
+				tickEventHandler();	
+				fprintf(stderr, "tick");
+				lastTickTimeStmp -= deltaTime;
+			}
+		}
+					
 
 		while(SDL_PollEvent(&event) != 0) {
 			switch(event.type) {
@@ -41,7 +52,7 @@ void handleEvent(GameState *gameState, Uint32 msDelay) {
 					break;
 				case SDL_KEYDOWN:
 					fprintf(stderr,"key down\n");
-					handleKeyEvents();
+					handleKeyEvent();
 					break;
 				default:
 					break;
