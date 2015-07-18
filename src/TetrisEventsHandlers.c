@@ -1,5 +1,11 @@
 #include "TetrisEventsHandlers.h"
 
-void tickEventHandler() {
+void tickEventHandler(GameState *gameState) {
+	if(gameState->gameStatus != starting || gameState->gameStatus != running)
+		return;
+	
+	if (!moveShape(gameState,down)) {
+		
+	}
 
 }

@@ -37,8 +37,7 @@ void handleEvent(GameState *gameState, Uint32 msDelay) {
 			Uint32 deltaTime = lastTickTimeStmp - SDL_GetTicks();
 			
 			if (deltaTime >= G_GameConfig.blockDropDelayMs) {
-				tickEventHandler();	
-				fprintf(stderr, "tick");
+				tickEventHandler(gameState);	
 				lastTickTimeStmp -= deltaTime;
 			}
 		}
