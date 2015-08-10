@@ -9,6 +9,7 @@
 #include "GameConfig.h"
 #include "EventsManager.h"
 #include "TetrisGraphicEngine.h"
+#include "GameMecanics.h"
 
 void runGameLoop(SDL_Window* window,SDL_Renderer* renderer);
 

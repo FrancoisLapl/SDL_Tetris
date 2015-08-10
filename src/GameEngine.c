@@ -49,6 +49,7 @@ void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
 		handleEvent(&gameState,  loopTime - elapsedTime);	
 
 		if ( gameState.gameStatus == starting) {
+			initialiseGameScene(&gameState);
 			gameState.gameStatus = running;
 		}
 	}
