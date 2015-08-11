@@ -20,7 +20,7 @@ typedef struct {
 
 typedef enum { starting, running, paused, stopped } GameStatus;
 
-typedef enum { square, line, leftLShape, rightLShape, tShape, leftSShape, rightShape } ShapeType;
+typedef enum { square, line, leftLShape, rightLShape, tShape, leftSShape, rightSShape } ShapeType;
 
 typedef struct {
 	ShapeType type;

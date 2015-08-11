@@ -18,6 +18,9 @@ static Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 
 static Block* createBlockAt(Uint32 i, Uint32 j, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 
+	if (i > G_GameConfig.numberOfColumns || j > G_GameConfig.numberOfRows) 
+		fprintf(stderr, "Critical: Cannot create block at ,%d %d in grid\n", i, j);
+
 	Uint32 calcXPos = G_GameConfig.gridLeftPadding + i * G_GameConfig.blockSize;
 	Uint32 calcYPos = G_GameConfig.gridTopPadding + j * G_GameConfig.blockSize;
 
@@ -82,7 +85,7 @@ bool spawnTetrisShp(GameState *gameState) {
 
 	int r = rand() % 7;
 	
-	Uint32 centerCoord = G_GameConfig.numberOfColumns /2;
+	Uint32 centerCoord = G_GameConfig.numberOfColumns / 2;
 
 	Block *blockA;
 	Block *blockB;
@@ -91,53 +94,60 @@ bool spawnTetrisShp(GameState *gameState) {
 
 	switch (r) {
 		case 0:
-			//red line
-			blockA = createBlockAt(2, 1, 255, 0, 0, 0);
-			blockB = createBlock(2, 100, 255, 0, 0, 0);
-			blockC = createBlock(100, 100, 255, 0, 0, 0);
-			blockD = createBlock(100, 100, 255, 0, 0, 0);
+			//red left s shape 
+			gameState->tetrisBlk = leftSShape;
+			blockA = createBlockAt(centerCoord, 0, 255, 0, 0, 0);
+			blockB = createBlockAt(centerCoord - 1, 0, 255, 0, 0, 0);
+			blockC = createBlockAt(centerCoord, 1, 255, 0, 0, 0);
+			blockD = createBlockAt(centerCoord + 1, 1, 255, 0, 0, 0);
 			break;
 		case 1:
-			//blue
-			blockA = createBlock(100, 100, 0, 0, 255, 0);
-			blockB = createBlock(100, 100, 0, 0, 255, 0);
-			blockC = createBlock(100, 100, 0, 0, 255, 0);
-			blockD = createBlock(100, 100, 0, 0, 255, 0);
+			//blue left L shape 
+			gameState->tetrisBlk = leftLShape;
+			blockA = createBlockAt(centerCoord, 0, 0, 0, 255, 0);
+			blockB = createBlockAt(centerCoord, 1, 0, 0, 255, 0);
+			blockC = createBlockAt(centerCoord, 2, 0, 0, 255, 0);
+			blockD = createBlockAt(centerCoord - 1, 2, 0, 0, 255, 0);
 			break;
 		case 2:
-			//magenta
-			blockA = createBlock(100, 100, 255, 0, 255, 0);
-			blockB = createBlock(100, 100, 255, 0, 255, 0);
-			blockC = createBlock(100, 100, 255, 0, 255, 0);
-			blockD = createBlock(100, 100, 255, 0, 255, 0);
+			//magenta right s shape
+			gameState->tetrisBlk = rightSShape; 
+			blockA = createBlockAt(centerCoord, 0, 255, 0, 255, 0);
+			blockB = createBlockAt(centerCoord, 1, 255, 0, 255, 0);
+			blockC = createBlockAt(centerCoord - 1, 1, 255, 0, 255, 0);
+			blockD = createBlockAt(centerCoord + 1, 0, 255, 0, 255, 0);
 			break;
 		case 3:
-			//yellow
-			blockA = createBlock(100, 100, 255, 255, 0, 0);
-			blockB = createBlock(100, 100, 255, 255, 0, 0);
-			blockC = createBlock(100, 100, 255, 255, 0, 0);
-			blockD = createBlock(100, 100, 255, 255, 0, 0);
+			//yellow square
+			gameState->tetrisBlk = square;
+			blockA = createBlockAt(centerCoord - 1, 0, 255, 255, 0, 0);
+			blockB = createBlockAt(centerCoord - 1, 1, 255, 255, 0, 0);
+			blockC = createBlockAt(centerCoord, 0, 255, 255, 0, 0);
+			blockD = createBlockAt(centerCoord, 1, 255, 255, 0, 0);
 			break;
 		case 4:
-			//cyan
-			blockA = createBlock(100, 100, 0, 255, 255, 0);
-			blockB = createBlock(100, 100, 0, 255, 255, 0);
-			blockC = createBlock(100, 100, 0, 255, 255, 0);
-			blockD = createBlock(100, 100, 0, 255, 255, 0);
+			//cyan line
+			gameState->tetrisBlk = line;
+			blockA = createBlockAt(centerCoord, 0, 0, 255, 255, 0);
+			blockB = createBlockAt(centerCoord, 1, 0, 255, 255, 0);
+			blockC = createBlockAt(centerCoord, 2, 0, 255, 255, 0);
+			blockD = createBlockAt(centerCoord, 3, 0, 255, 255, 0);
 			break;
 		case 5:
-			//purple
-			blockA = createBlock(100, 100, 127, 0, 255, 0);
-			blockB = createBlock(100, 100, 127, 0, 255, 0);
-			blockC = createBlock(100, 100, 127, 0, 255, 0);
-			blockD = createBlock(100, 100, 127, 0, 255, 0);
+			//purple t shape
+			gameState->tetrisBlk = tShape;
+			blockA = createBlockAt(centerCoord - 1, 0, 127, 0, 255, 0);
+			blockB = createBlockAt(centerCoord, 0, 127, 0, 255, 0);
+			blockC = createBlockAt(centerCoord + 1, 0, 127, 0, 255, 0);
+			blockD = createBlockAt(centerCoord, 1, 127, 0, 255, 0);
 			break;
 		case 6:
-			//orange
+			//orange right L shape
+			gameState->tetrisBlk = rightLShape;
 			blockA = createBlockAt(centerCoord, 0, 255, 128, 0, 0);
 			blockB = createBlockAt(centerCoord, 1, 255, 128, 0, 0);
 			blockC = createBlockAt(centerCoord, 2, 255, 128, 0, 0);
-			blockD = createBlockAt(centerCoord, 3, 255, 128, 0, 0);
+			blockD = createBlockAt(centerCoord + 1, 2, 255, 128, 0, 0);
 			break;
 		}
 
