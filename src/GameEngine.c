@@ -44,10 +44,10 @@ void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
 
 	 	elapsedTime = SDL_GetTicks() - loopStartTime;	
 		
-		fprintf(stderr,"rendering time is: %d \n",elapsedTime);
+		//fprintf(stderr,"rendering time is: %d \n",elapsedTime);
 
 		handleEvent(&gameState,  loopTime - elapsedTime);	
-
+	
 		if ( gameState.gameStatus == starting) {
 			initialiseGameScene(&gameState);
 			gameState.gameStatus = running;

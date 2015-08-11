@@ -7,19 +7,22 @@
 #include "GameEngine.h"
 #include "test.h"
 #include "GameConfig.h"
+#include <time.h>
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
 static void initialiseGameConfigs(){
 	G_GameConfig.windowWidth = 500;
-	G_GameConfig.windowHeight = 580;
+	G_GameConfig.windowHeight = 600;
 	G_GameConfig.targetFps = 60;
 	G_GameConfig.blockDropDelayMs = 600;
 	G_GameConfig.numberOfRows = 21;
-	G_GameConfig.numberOfColumns = 11;
+	G_GameConfig.numberOfColumns = 12;
 	G_GameConfig.levelDifficultyModifier = 0.1;
-	G_GameConfig.blockSize = 25;
+	G_GameConfig.blockSize = 26;
+	G_GameConfig.gridLeftPadding = 15;
+	G_GameConfig.gridTopPadding = 20;
 }
 
 static bool initSDL()
@@ -65,6 +68,8 @@ int main()
 		return 0;
 	}
 	
+	//initialise random seed for blocks
+	srand(time(NULL));
 	initialiseGameConfigs();
 	
 	if (!initSDL()){

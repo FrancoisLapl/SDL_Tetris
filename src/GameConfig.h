@@ -11,6 +11,8 @@ typedef struct {
 	Uint32 windowHeight;
 	float levelDifficultyModifier; 
 	Uint32 blockSize;
+	Uint32 gridLeftPadding;
+	Uint32 gridTopPadding;
 } GameConfiguration;
 
 GameConfiguration G_GameConfig;

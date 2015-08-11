@@ -3,6 +3,7 @@
 static SDL_Renderer *sdlRenderer;
 
 void initializeGraphicEngine(SDL_Renderer *renderer) {
+	assert(renderer != NULL);
 	sdlRenderer = renderer;
 }
 
@@ -28,18 +29,16 @@ static void renderBlock(Block *block) {
 	
 	SDL_RenderFillRect(sdlRenderer, &rect);
 
-	SDL_SetRenderDrawColor(sdlRenderer, block->color.r - 40 
-					  , block->color.g - 40
-					  , block->color.b - 40
-					  , block->color.a);
+	SDL_SetRenderDrawColor(sdlRenderer, block->color.r/1.4
+					  				  , block->color.g/1.4
+					  				  , block->color.b/1.4
+					  				  , block->color.a);
 
 	SDL_RenderDrawRect(sdlRenderer, &rect);
 }
 
 void renderGame(GameState *gameState){
 	assert(gameState != NULL);
-
-	fprintf(stderr,"rendering\n");
 
 	renderBackground(); 
 

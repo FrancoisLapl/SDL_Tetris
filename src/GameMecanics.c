@@ -16,139 +16,148 @@ static Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	return block;	
 }
 
-static void putTetrisBlock(GameState *gameState) {
-	
-	Block *newBlock = createBlock(100, 50
-				     	 , 128
-				     	 , 128
-				     	 , 128
-			     		 , 1);
-		
-	DL_push(&gameState->blockList, &newBlock);
-	
+static Block* createBlockAt(Uint32 i, Uint32 j, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+
+	Uint32 calcXPos = G_GameConfig.gridLeftPadding + i * G_GameConfig.blockSize;
+	Uint32 calcYPos = G_GameConfig.gridTopPadding + j * G_GameConfig.blockSize;
+
+	return createBlock(calcXPos, calcYPos, r, g, b , a);
 }
 
 static void generateWalls(GameState *gameState) {
 
 	assert(gameState != NULL);
 	int i;
-	int topPadding = 20;
-	int leftPadding = 15;
 	
 	// Generate left wall
-	for(i = 0; i < G_GameConfig.numberOfRows - 1; i++) {
+	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
 
-		int yPos = topPadding + i * G_GameConfig.blockSize;
-		Block *newBlock = createBlock(leftPadding, yPos
-					     		 , 128
-					     		 , 128
-					     		 , 128
-					     		 , 1);
-		
+		Block *newBlock = createBlockAt(0, i
+					     		 		 , 128
+					     		 		 , 128
+					     		 		 , 128
+					     		 		 , 1);
+
 		DL_push(&gameState->envBlockList, &newBlock);
 	}
 	
 	// Generate right wall
-	int rgtWllxPos = leftPadding + G_GameConfig.blockSize * (G_GameConfig.numberOfColumns - 1);
+	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
 
-	for(i = 0; i < G_GameConfig.numberOfRows - 1; i++) {
-
-		int yPos = topPadding + i * G_GameConfig.blockSize;
-		Block *newBlock = createBlock(rgtWllxPos, yPos
-					     		 , 128
-					     		 , 128
-					     		 , 128
-					     		 , 1);
+		Block *newBlock = createBlockAt(G_GameConfig.numberOfColumns, i
+					     		 							   	 	, 128
+					     		 							   	 	, 128
+					     		 							   	 	, 128
+					     		 							   	 	, 1);
 		
 		DL_push(&gameState->envBlockList, &newBlock);
 	}
 
 	// Generate bottom wall
-	int btmWllyPos = topPadding + G_GameConfig.blockSize * (G_GameConfig.numberOfRows - 1); 
+	for(i = 0; i <= G_GameConfig.numberOfColumns; i++) {
 
-	for(i = 0; i < G_GameConfig.numberOfColumns; i++) {
-
-		int xPos = leftPadding + i * G_GameConfig.blockSize;
-		Block *newBlock = createBlock(xPos, btmWllyPos
-					     	  , 128
-					     	  , 128
-					     	  , 128
-				     		  , 1);
+		Block *newBlock = createBlockAt(i, G_GameConfig.numberOfRows
+					     	  		   , 128
+					     	  		   , 128
+					     	  		   , 128
+				     		  		   , 1);
 		
 		DL_push(&gameState->envBlockList, &newBlock);
 	}
 }
 
 void initialiseGameScene(GameState *gameState) {
-	
+		assert(gameState != NULL);
+
 		generateWalls(gameState);
-		putTetrisBlock(gameState);
+		spawnTetrisShp(gameState);
+		return;
 }
 
 bool blockIsAt(GameState *gameState, int i, int j) {
-
+	return true;
 }
 
 bool spawnTetrisShp(GameState *gameState) {
+
 	int r = rand() % 7;
-	putTetrisBlock(gameState);
+	
+	Uint32 centerCoord = G_GameConfig.numberOfColumns /2;
+
+	Block *blockA;
+	Block *blockB;
+	Block *blockC;
+	Block *blockD;
+
 	switch (r) {
+		case 0:
+			//red line
+			blockA = createBlockAt(2, 1, 255, 0, 0, 0);
+			blockB = createBlock(2, 100, 255, 0, 0, 0);
+			blockC = createBlock(100, 100, 255, 0, 0, 0);
+			blockD = createBlock(100, 100, 255, 0, 0, 0);
+			break;
 		case 1:
-			//red
-			color->r = 255;
-			color->g = 0;
-			color->b = 0;
-			color->a = 0;
+			//blue
+			blockA = createBlock(100, 100, 0, 0, 255, 0);
+			blockB = createBlock(100, 100, 0, 0, 255, 0);
+			blockC = createBlock(100, 100, 0, 0, 255, 0);
+			blockD = createBlock(100, 100, 0, 0, 255, 0);
 			break;
 		case 2:
-			//blue
-			color->r = 0;
-			color->g = 0;
-			color->b = 255;
-			color->a = 0;
+			//magenta
+			blockA = createBlock(100, 100, 255, 0, 255, 0);
+			blockB = createBlock(100, 100, 255, 0, 255, 0);
+			blockC = createBlock(100, 100, 255, 0, 255, 0);
+			blockD = createBlock(100, 100, 255, 0, 255, 0);
 			break;
 		case 3:
-			//magenta
-			color->r = 255;
-			color->g = 0;
-			color->b = 255;
-			color->a = 0;
+			//yellow
+			blockA = createBlock(100, 100, 255, 255, 0, 0);
+			blockB = createBlock(100, 100, 255, 255, 0, 0);
+			blockC = createBlock(100, 100, 255, 255, 0, 0);
+			blockD = createBlock(100, 100, 255, 255, 0, 0);
 			break;
 		case 4:
-			//yellow
-			color->r = 255;
-			color->g = 255;
-			color->b = 0;
-			color->a = 0;
+			//cyan
+			blockA = createBlock(100, 100, 0, 255, 255, 0);
+			blockB = createBlock(100, 100, 0, 255, 255, 0);
+			blockC = createBlock(100, 100, 0, 255, 255, 0);
+			blockD = createBlock(100, 100, 0, 255, 255, 0);
 			break;
 		case 5:
-			//cyan
-			color->r = 0;
-			color->g = 255;
-			color->b = 255;
-			color->a = 0;
+			//purple
+			blockA = createBlock(100, 100, 127, 0, 255, 0);
+			blockB = createBlock(100, 100, 127, 0, 255, 0);
+			blockC = createBlock(100, 100, 127, 0, 255, 0);
+			blockD = createBlock(100, 100, 127, 0, 255, 0);
 			break;
 		case 6:
-			//purple
-			color->r = 255;
-			color->g = 0;
-			color->b = 0;
-			color->a = 0;
-			break;
-		case 7:
 			//orange
-			color->r = 255;
-			color->g = 128;
-			color->b = 0;
-			color->a = 0;
+			blockA = createBlockAt(centerCoord, 0, 255, 128, 0, 0);
+			blockB = createBlockAt(centerCoord, 1, 255, 128, 0, 0);
+			blockC = createBlockAt(centerCoord, 2, 255, 128, 0, 0);
+			blockD = createBlockAt(centerCoord, 3, 255, 128, 0, 0);
 			break;
 		}
+
+		gameState->tetrisBlk.blockA = blockA;
+		gameState->tetrisBlk.blockB = blockB;
+		gameState->tetrisBlk.blockC = blockC;
+		gameState->tetrisBlk.blockD = blockD;
+
+		DL_push(&gameState->blockList, &blockA);
+		DL_push(&gameState->blockList, &blockB);
+		DL_push(&gameState->blockList, &blockC);
+		DL_push(&gameState->blockList, &blockD);
+
+		return true;
 }
 
 bool moveShape(GameState *gameState, Direction direction) {
-	
+	return true;
 }
 
 void dropShape(GameState *gameState) {
-
+	return ;
 }
