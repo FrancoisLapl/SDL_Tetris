@@ -29,7 +29,7 @@ void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
 	
 	Uint32 loopStartTime = 0;
 	Uint32 elapsedTime = 0;
-	double loopTime = 1000 / G_GameConfig.targetFps; 
+	Uint32 loopDuration = 1000 / G_GameConfig.targetFps; 
 
 	GameState gameState;
 
@@ -39,14 +39,15 @@ void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
 	while(!gameState.quitRequested){
 		elapsedTime = 0;
 		loopStartTime = SDL_GetTicks();
-
+		
+		// fprintf(stderr, " Error(s) main gameloop\n");
+		
 		renderGame(&gameState);
 
 	 	elapsedTime = SDL_GetTicks() - loopStartTime;	
-		
-		//fprintf(stderr,"rendering time is: %d \n",elapsedTime);
 
-		handleEvent(&gameState,  loopTime - elapsedTime);	
+	 	if (elapsedTime < loopDuration)
+			handleEvent(&gameState,  loopDuration - elapsedTime);	
 	
 		if ( gameState.gameStatus == starting) {
 			initialiseGameScene(&gameState);

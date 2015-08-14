@@ -16,7 +16,7 @@ static void initialiseGameConfigs(){
 	G_GameConfig.windowWidth = 500;
 	G_GameConfig.windowHeight = 600;
 	G_GameConfig.targetFps = 60;
-	G_GameConfig.blockDropDelayMs = 600;
+	G_GameConfig.blockDropDelayMs = 1000;
 	G_GameConfig.numberOfRows = 21;
 	G_GameConfig.numberOfColumns = 12;
 	G_GameConfig.levelDifficultyModifier = 0.1;
@@ -39,14 +39,17 @@ static bool initSDL()
 		return false;
 	}
 
-	renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
+	renderer = SDL_CreateRenderer(window,-1,0);
 			
 	if (renderer == NULL){
 		fprintf(stderr, "\nUnable to create the main renderer. Stopping the Tetris. Error(s):  %s\n", SDL_GetError());
 		return false;
 	}
-	
+
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
 	SDL_RenderSetLogicalSize(renderer, G_GameConfig.windowWidth , G_GameConfig.windowHeight);
+
 	return true;
 }
 
