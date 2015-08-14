@@ -1,10 +1,42 @@
 #include "GameMecanics.h"
 
-static int computedRelXOffset(Uint32 x, Uint32 i) {
-	Uint32 oldIndex = (x - G_GameConfig.gridLeftPadding) / G_GameConfig.blockSize;
-	Uint32 deltaIndex = i - oldIndex;
+static bool twoBlockAreOverlapping(Block *blockA, Block *blockB) {
+	if (blockA->x == blockB->x && blockA->y == blockB->y)
+		return true;
+	return false;
+}
 
-	return deltaIndex * G_GameConfig.blockSize;
+static bool thereIsColision(GameState *gameState, Block *block) {
+	
+	int overLapCount = 0;
+	int i = 0;
+
+	for(i = 0;i < gameState->blockList.count;i++) {
+		Block *tmpBlock;
+		DL_getAt(&gameState->blockList,i,&tmpBlock);
+
+		if (twoBlockAreOverlapping(block,tmpBlock)){
+			overLapCount++;
+		}
+	}
+
+	for(i = 0;i < gameState->envBlockList.count;i++) {
+		Block *tmpBlock;
+		DL_getAt(&gameState->envBlockList,i,&tmpBlock);
+
+		if (twoBlockAreOverlapping(block,tmpBlock)){
+			overLapCount++;
+		}
+	}
+
+	if (overLapCount >=2) {
+		return true;
+	}
+	return false;
+}
+
+static int computedRelXOffset(Uint32 i) {
+	return i * G_GameConfig.blockSize;
 }
 
 static int computedRelYOffset(Uint32 j) {
@@ -94,6 +126,10 @@ void initialiseGameScene(GameState *gameState) {
 		generateWalls(gameState);
 		spawnTetrisShp(gameState);
 		return;
+}
+
+void rotateShape(GameState *gameState){
+	return;	
 }
 
 bool blockIsAt(GameState *gameState, int i, int j) {
@@ -186,11 +222,32 @@ bool spawnTetrisShp(GameState *gameState) {
 }
 
 bool moveShape(GameState *gameState, Direction direction) {
-	// add colision detection
+
+	int OldXArray[4];
+	int OldYArray[4];
+
+	OldXArray[0] = gameState->tetrisBlk.blockA->x;
+	OldXArray[1] = gameState->tetrisBlk.blockB->x;
+	OldXArray[2] = gameState->tetrisBlk.blockC->x;
+	OldXArray[3] = gameState->tetrisBlk.blockD->x;
+
+	OldYArray[0] = gameState->tetrisBlk.blockA->y;
+	OldYArray[1] = gameState->tetrisBlk.blockB->y;
+	OldYArray[2] = gameState->tetrisBlk.blockC->y;
+	OldYArray[3] = gameState->tetrisBlk.blockD->y;
+
 	switch (direction) {
 		case left:
+			gameState->tetrisBlk.blockA->x += computedRelXOffset(-1);
+			gameState->tetrisBlk.blockB->x += computedRelXOffset(-1);
+			gameState->tetrisBlk.blockC->x += computedRelXOffset(-1);
+			gameState->tetrisBlk.blockD->x += computedRelXOffset(-1);
 			break;
 		case right:
+			gameState->tetrisBlk.blockA->x += computedRelXOffset(1);
+			gameState->tetrisBlk.blockB->x += computedRelXOffset(1);
+			gameState->tetrisBlk.blockC->x += computedRelXOffset(1);
+			gameState->tetrisBlk.blockD->x += computedRelXOffset(1);
 			break;
 		case down:
 			gameState->tetrisBlk.blockA->y += computedRelYOffset(1);
@@ -202,12 +259,25 @@ bool moveShape(GameState *gameState, Direction direction) {
 			assert(false);
 	}
 
-	/*fprintf(stderr, "%d\n",gameState->tetrisBlk.blockA->y);
-	fprintf(stderr, "%d\n",gameState->tetrisBlk.blockB->y);
-	fprintf(stderr, "%d\n",gameState->tetrisBlk.blockC->y);
-	fprintf(stderr, "%d\n",gameState->tetrisBlk.blockD->y);
+	if (thereIsColision(gameState,gameState->tetrisBlk.blockA) ||
+		thereIsColision(gameState,gameState->tetrisBlk.blockB) ||
+		thereIsColision(gameState,gameState->tetrisBlk.blockC) ||
+		thereIsColision(gameState,gameState->tetrisBlk.blockD)) {
 
-	fprintf(stderr, "down it goes!\n");*/
+		// a colision was detected, reverse to old coordinates
+		gameState->tetrisBlk.blockA->x = OldXArray[0];
+		gameState->tetrisBlk.blockB->x = OldXArray[1];
+		gameState->tetrisBlk.blockC->x = OldXArray[2];
+		gameState->tetrisBlk.blockD->x = OldXArray[3];
+
+		gameState->tetrisBlk.blockA->y = OldYArray[0];
+		gameState->tetrisBlk.blockB->y = OldYArray[1];
+		gameState->tetrisBlk.blockC->y = OldYArray[2];
+		gameState->tetrisBlk.blockD->y = OldYArray[3];
+
+		return false;
+	}
+
 	return true;
 }
 

@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "GameConfig.h"
 #include "TetrisEventsHandlers.h"
+#include "GameMecanics.h"
 
 void handleEvent(GameState *gameState, Uint32 msDelay);
 

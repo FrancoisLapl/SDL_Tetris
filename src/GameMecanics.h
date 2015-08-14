@@ -9,6 +9,7 @@
 typedef enum { left, right, down } Direction;
 
 void initialiseGameScene(GameState *gameState);
+void rotateShape(GameState *gameState);
 bool blockIsAt(GameState *gameState, int i, int j);
 bool spawnTetrisShp(GameState *gameState);
 bool moveShape(GameState *gameState, Direction direction);
