@@ -35,6 +35,14 @@ static bool thereIsColision(GameState *gameState, Block *block) {
 	return false;
 }
 
+static bool shapeColliding(GameState *gameState) {
+	
+	return thereIsColision(gameState,gameState->tetrisBlk.blockA) ||
+			thereIsColision(gameState,gameState->tetrisBlk.blockB) ||
+			thereIsColision(gameState,gameState->tetrisBlk.blockC) ||
+			thereIsColision(gameState,gameState->tetrisBlk.blockD);
+}
+
 static int computedRelXOffset(Uint32 i) {
 	return i * G_GameConfig.blockSize;
 }
@@ -128,6 +136,9 @@ void initialiseGameScene(GameState *gameState) {
 		return;
 }
 
+// [y −x] rotation - 90
+// [-y x] rotation 90
+
 void rotateShape(GameState *gameState) {
 
 	fprintf(stderr, "Inside Rotation \n");
@@ -169,20 +180,20 @@ void rotateShape(GameState *gameState) {
 
 	// rotate
 	int oldAY = gameState->tetrisBlk.blockA->y;
-	gameState->tetrisBlk.blockA->y = gameState->tetrisBlk.blockA->x * -1;
-	gameState->tetrisBlk.blockA->x = oldAY;
+	gameState->tetrisBlk.blockA->y = gameState->tetrisBlk.blockA->x;
+	gameState->tetrisBlk.blockA->x = oldAY * -1;
 
 	int oldBY = gameState->tetrisBlk.blockB->y;
-	gameState->tetrisBlk.blockB->y = gameState->tetrisBlk.blockB->x * -1;
-	gameState->tetrisBlk.blockB->x = oldBY;
+	gameState->tetrisBlk.blockB->y = gameState->tetrisBlk.blockB->x;
+	gameState->tetrisBlk.blockB->x = oldBY * -1;
 
 	int oldCY = gameState->tetrisBlk.blockC->y;
-	gameState->tetrisBlk.blockC->y = gameState->tetrisBlk.blockC->x * -1;
-	gameState->tetrisBlk.blockC->x = oldCY;
+	gameState->tetrisBlk.blockC->y = gameState->tetrisBlk.blockC->x;
+	gameState->tetrisBlk.blockC->x = oldCY * -1;
 
 	int oldDY = gameState->tetrisBlk.blockD->y;
-	gameState->tetrisBlk.blockD->y = gameState->tetrisBlk.blockD->x * -1;
-	gameState->tetrisBlk.blockD->x = oldDY;
+	gameState->tetrisBlk.blockD->y = gameState->tetrisBlk.blockD->x;
+	gameState->tetrisBlk.blockD->x = oldDY * -1;
 	
 	// translate back to old coordonates
 	gameState->tetrisBlk.blockA->x -= translationVector[0];
@@ -198,11 +209,8 @@ void rotateShape(GameState *gameState) {
 	gameState->tetrisBlk.blockD->y -= translationVector[1];
 
 	// colision?
-	if (thereIsColision(gameState,gameState->tetrisBlk.blockA) ||
-		thereIsColision(gameState,gameState->tetrisBlk.blockB) ||
-		thereIsColision(gameState,gameState->tetrisBlk.blockC) ||
-		thereIsColision(gameState,gameState->tetrisBlk.blockD)) {
-
+	if (shapeColliding(gameState)) {
+		// undo
 		gameState->tetrisBlk.blockA->x = blockAPoint.x;
 		gameState->tetrisBlk.blockB->x = blockBPoint.x;
 		gameState->tetrisBlk.blockC->x = blockCPoint.x;
@@ -213,7 +221,6 @@ void rotateShape(GameState *gameState) {
 		gameState->tetrisBlk.blockC->y = blockCPoint.y;
 		gameState->tetrisBlk.blockD->y = blockDPoint.y;
 	}
-	// Undo or continue
 }
 
 bool blockIsAt(GameState *gameState, int i, int j) {
@@ -261,8 +268,8 @@ bool spawnTetrisShp(GameState *gameState) {
 			gameState->tetrisBlk.type = square;
 			blockA = createBlockAt(centerCoord - 1, 0, 255, 255, 0, 0);
 			blockB = createBlockAt(centerCoord - 1, 1, 255, 255, 0, 0);
-			blockC = createBlockAt(centerCoord, 0, 255, 255, 0, 0);
-			blockD = createBlockAt(centerCoord, 1, 255, 255, 0, 0);
+			blockC = createBlockAt(centerCoord, 1, 255, 255, 0, 0);
+			blockD = createBlockAt(centerCoord, 0, 255, 255, 0, 0);
 			break;
 		case 4:
 			//cyan line
@@ -343,10 +350,7 @@ bool moveShape(GameState *gameState, Direction direction) {
 			assert(false);
 	}
 
-	if (thereIsColision(gameState,gameState->tetrisBlk.blockA) ||
-		thereIsColision(gameState,gameState->tetrisBlk.blockB) ||
-		thereIsColision(gameState,gameState->tetrisBlk.blockC) ||
-		thereIsColision(gameState,gameState->tetrisBlk.blockD)) {
+	if (shapeColliding(gameState)) {
 
 		// a colision was detected, reverse to old coordinates
 		gameState->tetrisBlk.blockA->x = OldXArray[0];
@@ -366,5 +370,10 @@ bool moveShape(GameState *gameState, Direction direction) {
 }
 
 void dropShape(GameState *gameState) {
-	return ;
+	
+	while (moveShape(gameState,down)) {	
+
+	}
+
+	return;
 }
