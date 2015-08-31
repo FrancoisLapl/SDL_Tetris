@@ -132,9 +132,13 @@ void rotateShape(GameState *gameState) {
 
 	fprintf(stderr, "Inside Rotation \n");
 
-	// save Old coordonates
+	int translationVector[2];
 	Point blockAPoint, blockBPoint, blockCPoint, blockDPoint;
 
+	translationVector[0] = 0 - gameState->tetrisBlk.blockC->x;
+	translationVector[1] = 0 - gameState->tetrisBlk.blockC->y;
+
+	// save Old coordonates
 	blockAPoint.x = gameState->tetrisBlk.blockA->x;
 	blockAPoint.y = gameState->tetrisBlk.blockA->y;
 
@@ -148,11 +152,6 @@ void rotateShape(GameState *gameState) {
 	blockDPoint.y = gameState->tetrisBlk.blockD->y;
 
 	// translate blocks to origin
-	int translationVector[2];
-
-	translationVector[0] = 0 - blockCPoint.x;
-	translationVector[1] = 0 - blockCPoint.y;
-
 	fprintf(stderr, "Inside Rotation %d \n", translationVector[0]);
 	fprintf(stderr, "Inside Rotation %d \n", translationVector[1]);
 
@@ -169,20 +168,23 @@ void rotateShape(GameState *gameState) {
 	gameState->tetrisBlk.blockD->y += translationVector[1];
 
 	// rotate
-	gameState->tetrisBlk.blockA->x = blockAPoint.y;
-	gameState->tetrisBlk.blockA->y = blockAPoint.x * -1;
+	int oldAY = gameState->tetrisBlk.blockA->y;
+	gameState->tetrisBlk.blockA->y = gameState->tetrisBlk.blockA->x * -1;
+	gameState->tetrisBlk.blockA->x = oldAY;
 
-	gameState->tetrisBlk.blockB->x = blockBPoint.y;
-	gameState->tetrisBlk.blockB->y = blockBPoint.x * -1;
+	int oldBY = gameState->tetrisBlk.blockB->y;
+	gameState->tetrisBlk.blockB->y = gameState->tetrisBlk.blockB->x * -1;
+	gameState->tetrisBlk.blockB->x = oldBY;
 
-	gameState->tetrisBlk.blockC->x = blockCPoint.y;
-	gameState->tetrisBlk.blockC->y = blockCPoint.x * -1;
+	int oldCY = gameState->tetrisBlk.blockC->y;
+	gameState->tetrisBlk.blockC->y = gameState->tetrisBlk.blockC->x * -1;
+	gameState->tetrisBlk.blockC->x = oldCY;
 
-	gameState->tetrisBlk.blockD->x = blockDPoint.y;
-	gameState->tetrisBlk.blockD->y = blockDPoint.x * -1;
+	int oldDY = gameState->tetrisBlk.blockD->y;
+	gameState->tetrisBlk.blockD->y = gameState->tetrisBlk.blockD->x * -1;
+	gameState->tetrisBlk.blockD->x = oldDY;
 	
 	// translate back to old coordonates
-
 	gameState->tetrisBlk.blockA->x -= translationVector[0];
 	gameState->tetrisBlk.blockA->y -= translationVector[1];
 
@@ -196,7 +198,21 @@ void rotateShape(GameState *gameState) {
 	gameState->tetrisBlk.blockD->y -= translationVector[1];
 
 	// colision?
+	if (thereIsColision(gameState,gameState->tetrisBlk.blockA) ||
+		thereIsColision(gameState,gameState->tetrisBlk.blockB) ||
+		thereIsColision(gameState,gameState->tetrisBlk.blockC) ||
+		thereIsColision(gameState,gameState->tetrisBlk.blockD)) {
 
+		gameState->tetrisBlk.blockA->x = blockAPoint.x;
+		gameState->tetrisBlk.blockB->x = blockBPoint.x;
+		gameState->tetrisBlk.blockC->x = blockCPoint.x;
+		gameState->tetrisBlk.blockD->x = blockDPoint.x;
+
+		gameState->tetrisBlk.blockA->y = blockAPoint.y;
+		gameState->tetrisBlk.blockB->y = blockBPoint.y;
+		gameState->tetrisBlk.blockC->y = blockCPoint.y;
+		gameState->tetrisBlk.blockD->y = blockDPoint.y;
+	}
 	// Undo or continue
 }
 

@@ -13,8 +13,8 @@ typedef struct {
 } Color;
 
 typedef struct {
-	Uint32 x;
-	Uint32 y;
+	int x;
+	int y;
 	Color color;
 } Block;
 
