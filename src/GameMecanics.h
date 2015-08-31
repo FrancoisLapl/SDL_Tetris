@@ -8,6 +8,11 @@
 
 typedef enum { left, right, down } Direction;
 
+typedef struct {
+	int x;
+	int y;
+} Point;
+
 void initialiseGameScene(GameState *gameState);
 void rotateShape(GameState *gameState);
 bool blockIsAt(GameState *gameState, int i, int j);

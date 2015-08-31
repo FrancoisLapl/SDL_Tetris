@@ -2,6 +2,7 @@
 
 void clickUpEventHandler(GameState *gameState) {
 	assert(gameState != NULL);
+	fprintf(stderr, "Rotation \n");
 	if(gameState->gameStatus != running)
 		return;
 

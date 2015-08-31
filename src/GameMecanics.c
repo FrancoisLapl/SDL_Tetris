@@ -128,8 +128,76 @@ void initialiseGameScene(GameState *gameState) {
 		return;
 }
 
-void rotateShape(GameState *gameState){
-	return;	
+void rotateShape(GameState *gameState) {
+
+	fprintf(stderr, "Inside Rotation \n");
+
+	// save Old coordonates
+	Point blockAPoint, blockBPoint, blockCPoint, blockDPoint;
+
+	blockAPoint.x = gameState->tetrisBlk.blockA->x;
+	blockAPoint.y = gameState->tetrisBlk.blockA->y;
+
+	blockBPoint.x = gameState->tetrisBlk.blockB->x;
+	blockBPoint.y = gameState->tetrisBlk.blockB->y;
+
+	blockCPoint.x = gameState->tetrisBlk.blockC->x;
+	blockCPoint.y = gameState->tetrisBlk.blockC->y;
+
+	blockDPoint.x = gameState->tetrisBlk.blockD->x;
+	blockDPoint.y = gameState->tetrisBlk.blockD->y;
+
+	// translate blocks to origin
+	int translationVector[2];
+
+	translationVector[0] = 0 - blockCPoint.x;
+	translationVector[1] = 0 - blockCPoint.y;
+
+	fprintf(stderr, "Inside Rotation %d \n", translationVector[0]);
+	fprintf(stderr, "Inside Rotation %d \n", translationVector[1]);
+
+	gameState->tetrisBlk.blockA->x += translationVector[0];
+	gameState->tetrisBlk.blockA->y += translationVector[1];
+
+	gameState->tetrisBlk.blockB->x += translationVector[0];
+	gameState->tetrisBlk.blockB->y += translationVector[1];
+
+	gameState->tetrisBlk.blockC->x += translationVector[0];
+	gameState->tetrisBlk.blockC->y += translationVector[1];
+
+	gameState->tetrisBlk.blockD->x += translationVector[0];
+	gameState->tetrisBlk.blockD->y += translationVector[1];
+
+	// rotate
+	gameState->tetrisBlk.blockA->x = blockAPoint.y;
+	gameState->tetrisBlk.blockA->y = blockAPoint.x * -1;
+
+	gameState->tetrisBlk.blockB->x = blockBPoint.y;
+	gameState->tetrisBlk.blockB->y = blockBPoint.x * -1;
+
+	gameState->tetrisBlk.blockC->x = blockCPoint.y;
+	gameState->tetrisBlk.blockC->y = blockCPoint.x * -1;
+
+	gameState->tetrisBlk.blockD->x = blockDPoint.y;
+	gameState->tetrisBlk.blockD->y = blockDPoint.x * -1;
+	
+	// translate back to old coordonates
+
+	gameState->tetrisBlk.blockA->x -= translationVector[0];
+	gameState->tetrisBlk.blockA->y -= translationVector[1];
+
+	gameState->tetrisBlk.blockB->x -= translationVector[0];
+	gameState->tetrisBlk.blockB->y -= translationVector[1];
+
+	gameState->tetrisBlk.blockC->x -= translationVector[0];
+	gameState->tetrisBlk.blockC->y -= translationVector[1];
+
+	gameState->tetrisBlk.blockD->x -= translationVector[0];
+	gameState->tetrisBlk.blockD->y -= translationVector[1];
+
+	// colision?
+
+	// Undo or continue
 }
 
 bool blockIsAt(GameState *gameState, int i, int j) {

@@ -9,6 +9,7 @@ static void handleKeyEvent(GameState *gameState) {
 
 	if(currentKeyStates[SDL_SCANCODE_UP]) {
 		fprintf(stderr,"Up\n");
+		clickUpEventHandler(gameState);
 	}
 	else if(currentKeyStates[SDL_SCANCODE_DOWN]) {
 		fprintf(stderr,"Down\n");
