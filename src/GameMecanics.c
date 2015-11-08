@@ -77,8 +77,10 @@ static Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 
 static Block* createBlockAt(Uint32 i, Uint32 j, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
 
-	if (i > G_GameConfig.numberOfColumns || j > G_GameConfig.numberOfRows) 
+	if (i > G_GameConfig.numberOfColumns || j > G_GameConfig.numberOfRows) {
 		fprintf(stderr, "Critical: Cannot create block at ,%d %d in grid\n", i, j);
+		//exit(1);
+	}
 
 	Uint32 calcXPos = computeXFromIndex(i);
 	Uint32 calcYPos = computeYFromIndex(j);
@@ -106,26 +108,61 @@ static void generateWalls(GameState *gameState) {
 	// Generate right wall
 	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
 
-		Block *newBlock = createBlockAt(G_GameConfig.numberOfColumns, i
-					     		 							   	 	, 128
-					     		 							   	 	, 128
-					     		 							   	 	, 128
-					     		 							   	 	, 1);
+		Block *newBlock = createBlockAt(G_GameConfig.numberOfColumns + 1, i
+					     		 							   	 	    , 128
+					     		 							   	 	    , 128
+					     		 							   	 	    , 128
+					     		 							   	 	    , 1);
 		
 		DL_push(&gameState->envBlockList, &newBlock);
 	}
 
 	// Generate bottom wall
-	for(i = 0; i <= G_GameConfig.numberOfColumns; i++) {
+	for(i = 0; i <= G_GameConfig.numberOfColumns + 1; i++) {
 
-		Block *newBlock = createBlockAt(i, G_GameConfig.numberOfRows
-					     	  		   , 128
-					     	  		   , 128
-					     	  		   , 128
-				     		  		   , 1);
+		Block *newBlock = createBlockAt(i, G_GameConfig.numberOfRows, 128
+					     	  		   								  , 128
+					     	  		   								  , 128
+				     		  		   								  , 1);
 		
 		DL_push(&gameState->envBlockList, &newBlock);
 	}
+}
+
+static void removeLine(GameState *gameState, int j) {
+	int i;
+	for (i = 0;i <= gameState->blockList.count+1;i++) {
+
+		Block *tmpBlock = NULL;
+		DL_getAt(&gameState->blockList,i,&tmpBlock);
+
+		if (tmpBlock->y == computeYFromIndex(j)) {
+			DL_removeAt(&gameState->blockList,i);
+			i--;
+		}
+	}
+}
+
+static bool blockIsAt(GameState *gameState, int i, int j) {
+
+	int k;
+	//fprintf(stderr, "start for \n");
+	for (k = 0;k < gameState->blockList.count;k++) {
+
+		Block *tmpBlock = NULL;
+		DL_getAt(&gameState->blockList, k, &tmpBlock);
+
+		//fprintf(stderr, "Block x=%d y=%d \n", tmpBlock->x,tmpBlock->y);
+		//fprintf(stderr, "computed Block x=%d y=%d \n", computeXFromIndex(i), computeYFromIndex(j));
+		//fprintf(stderr, "== \n");
+
+		if (tmpBlock->x == computeXFromIndex(i) && tmpBlock->y == computeYFromIndex(j)) {
+			return true;
+		}
+	}
+
+	//fprintf(stderr, "end for \n");
+	return false;
 }
 
 void initialiseGameScene(GameState *gameState) {
@@ -138,7 +175,6 @@ void initialiseGameScene(GameState *gameState) {
 
 // [y −x] rotation - 90
 // [-y x] rotation 90
-
 void rotateShape(GameState *gameState) {
 
 	fprintf(stderr, "Inside Rotation \n");
@@ -163,8 +199,6 @@ void rotateShape(GameState *gameState) {
 	blockDPoint.y = gameState->tetrisBlk.blockD->y;
 
 	// translate blocks to origin
-	fprintf(stderr, "Inside Rotation %d \n", translationVector[0]);
-	fprintf(stderr, "Inside Rotation %d \n", translationVector[1]);
 
 	gameState->tetrisBlk.blockA->x += translationVector[0];
 	gameState->tetrisBlk.blockA->y += translationVector[1];
@@ -223,8 +257,28 @@ void rotateShape(GameState *gameState) {
 	}
 }
 
-bool blockIsAt(GameState *gameState, int i, int j) {
-	return true;
+void eraseFullLines(GameState *gameState) {
+	fprintf(stderr, "ereasing full lines\n");
+	int j,i;
+	fprintf(stderr, "number of rows : %d \n",G_GameConfig.numberOfRows);
+	fprintf(stderr, "number of columns : %d \n",G_GameConfig.numberOfColumns);
+
+	for(j = 0;j < G_GameConfig.numberOfRows;j++) {
+
+		bool lineIsFull = true;
+		for(i = 0;i < G_GameConfig.numberOfColumns;i++) {
+			if (!blockIsAt(gameState, i, j)) {
+				lineIsFull = false;
+				break;
+			} 
+		}
+
+		if (lineIsFull) {
+			fprintf(stderr, "Line is full\n");
+			//removeLine(gameState,j);
+			//j--;
+		}
+	}
 }
 
 bool spawnTetrisShp(GameState *gameState) {

@@ -15,7 +15,7 @@ typedef struct {
 
 void initialiseGameScene(GameState *gameState);
 void rotateShape(GameState *gameState);
-bool blockIsAt(GameState *gameState, int i, int j);
+void eraseFullLines(GameState *gameState);
 bool spawnTetrisShp(GameState *gameState);
 bool moveShape(GameState *gameState, Direction direction);
 void dropShape(GameState *gameState);
