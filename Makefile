@@ -2,7 +2,8 @@
 
 CC=gcc
 OBJDUMP=NO_OBJDUMP_IS_DECLARED
-CFLAGS= -c -Wall #-M pourait être utile
+DEBUG=FALSE
+CFLAGS= -c -Wall -Wextra -Wunreachable-code #-M pourait être utile
 LDFLAGS=
 SRCDIR= src/
 FILES= TetrisGraphicEngine.c EventsManager.c main.c DynamicList.c test.c GameEngine.c TetrisEventsHandlers.c GameMecanics.c
@@ -11,6 +12,9 @@ OBJECTS= $(SOURCES:.c=.o)
 EXE_NAME= Tetris
 LONG_EXE_NAME=
 
+ifeq ($(DEBUG),TRUE)
+	CFLAGS+= -ggdb
+endif
 
 UNAME_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
 ifeq ($(UNAME_S),Linux)

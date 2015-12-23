@@ -2,17 +2,20 @@
 
 static SDL_Renderer *sdlRenderer;
 
-void initializeGraphicEngine(SDL_Renderer *renderer) {
+void initializeGraphicEngine(SDL_Renderer *renderer) 
+{
 	assert(renderer != NULL);
 	sdlRenderer = renderer;
 }
 
-static void renderBackground() {
+static void renderBackground() 
+{
 	SDL_SetRenderDrawColor(sdlRenderer, 0, 0, 0, 0);
 	SDL_RenderClear(sdlRenderer);
 }
 
-static void renderBlock(Block *block) {
+static void renderBlock(Block *block) 
+{
 	assert(block != NULL);
 
 	SDL_SetRenderDrawColor(sdlRenderer, block->color.r
@@ -37,7 +40,8 @@ static void renderBlock(Block *block) {
 	SDL_RenderDrawRect(sdlRenderer, &rect);
 }
 
-void renderGame(GameState *gameState){
+void renderGame(GameState *gameState)
+{
 	assert(gameState != NULL);
 
 	renderBackground(); 
@@ -46,14 +50,14 @@ void renderGame(GameState *gameState){
 	//render regular blocks
 	for(i = 0;i < gameState->blockList.count;i++) {
 		Block *block;
-		DL_getAt(&gameState->blockList,i,&block);		
+		DL_getAt(&gameState->blockList, i, &block);		
 		renderBlock(block);
 	}
 
 	//render environement block
 	for(i = 0;i < gameState->envBlockList.count;i++) {
 		Block *block;
-		DL_getAt(&gameState->envBlockList,i,&block);		
+		DL_getAt(&gameState->envBlockList, i, &block);		
 		renderBlock(block);
 	}
 

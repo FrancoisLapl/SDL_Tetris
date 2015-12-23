@@ -1,20 +1,23 @@
 #include "GameEngine.h"
 
-static void cleanRessources(GameState *gameState){
+static void cleanRessources(GameState *gameState)
+{
 	DL_deleteList(&gameState->blockList);
 	DL_deleteList(&gameState->envBlockList);
 }
 
-static void freeBlock(void *elementPointer){
+static void freeBlockMemory(void *elementPointer)
+{
 	assert(elementPointer != NULL);
 
 	Block* pointerToBlock = *((void**)elementPointer);
 	free(pointerToBlock);
 }
 
-static void initializeGameState(GameState *gameState){
-	DL_initialize(&gameState->blockList, sizeof(Block*), freeBlock, 32);
-	DL_initialize(&gameState->envBlockList, sizeof(Block*), freeBlock, 32);
+static void initializeGameState(GameState *gameState)
+{
+	DL_initialize(&gameState->blockList, sizeof(Block*), freeBlockMemory, 32);
+	DL_initialize(&gameState->envBlockList, sizeof(Block*), freeBlockMemory, 32);
 
 	gameState->quitRequested = false;
 	gameState->gameStatus = starting;
@@ -22,7 +25,7 @@ static void initializeGameState(GameState *gameState){
 	gameState->currentScore = 0;
 }
 
-void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
+void runGameLoop(SDL_Window *window, SDL_Renderer *renderer)
 {
 	fprintf(stderr, " Error(s) before entering main gameloop: %s\n", SDL_GetError());
 	SDL_ClearError();
@@ -36,18 +39,16 @@ void runGameLoop(SDL_Window *window,SDL_Renderer *renderer)
 	initializeGameState(&gameState);
 	initializeGraphicEngine(renderer);
 
-	while(!gameState.quitRequested){
+	while(!gameState.quitRequested) {
 		elapsedTime = 0;
 		loopStartTime = SDL_GetTicks();
-		
-		// fprintf(stderr, " Error(s) main gameloop\n");
 		
 		renderGame(&gameState);
 
 	 	elapsedTime = SDL_GetTicks() - loopStartTime;	
 
 	 	if (elapsedTime < loopDuration)
-			handleEvent(&gameState,  loopDuration - elapsedTime);	
+			handleEvent(&gameState, loopDuration - elapsedTime);	
 	
 		if ( gameState.gameStatus == starting) {
 			initialiseGameScene(&gameState);

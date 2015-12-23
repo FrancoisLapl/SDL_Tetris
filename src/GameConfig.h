@@ -5,8 +5,8 @@ typedef struct {
 	Uint32 targetFps;
 	Uint32 maxLevel;
 	Uint32 blockDropDelayMs;
-	Uint32 numberOfRows;
-	Uint32 numberOfColumns;
+	int numberOfRows;
+	int numberOfColumns;
 	Uint32 windowWidth;
 	Uint32 windowHeight;
 	float levelDifficultyModifier; 

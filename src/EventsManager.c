@@ -3,9 +3,9 @@
 Uint32 aSleepTime = 0;
 Uint32 lastAwakeTime = 0;
 
-static void handleKeyEvent(GameState *gameState) {
-
-	const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+static void handleKeyEvent(GameState *gameState) 
+{
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
 	if(currentKeyStates[SDL_SCANCODE_UP]) {
 		fprintf(stderr,"Up\n");
@@ -29,8 +29,8 @@ static void handleKeyEvent(GameState *gameState) {
 	}
 }
 
-static bool itsTimeToTick(GameState *gameState) {
-
+static bool itsTimeToTick(GameState *gameState) 
+{
 	if(gameState->gameStatus == starting)
 		lastAwakeTime = SDL_GetTicks();
 
@@ -50,7 +50,8 @@ static bool itsTimeToTick(GameState *gameState) {
 	return false;
 }
 
-void handleEvent(GameState *gameState, Uint32 msDelay) {
+void handleEvent(GameState *gameState, Uint32 msDelay) 
+{
 
 	if (msDelay <= 0)
 		return;

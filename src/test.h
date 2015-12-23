@@ -8,5 +8,4 @@
 
 void runTests();
 
-
 #endif

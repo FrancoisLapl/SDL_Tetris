@@ -1,30 +1,33 @@
 #include "GameMecanics.h"
 
-static bool twoBlockAreOverlapping(Block *blockA, Block *blockB) {
+static bool twoBlockAreOverlapping(Block *blockA, Block *blockB) 
+{
 	if (blockA->x == blockB->x && blockA->y == blockB->y)
 		return true;
 	return false;
 }
 
-static bool thereIsColision(GameState *gameState, Block *block) {
-	
+static bool thereIsColision(GameState *gameState, Block *block) 
+{
 	int overLapCount = 0;
-	int i = 0;
+	int i;
 
+	// Checking for overlap in the player's block list
 	for(i = 0;i < gameState->blockList.count;i++) {
 		Block *tmpBlock;
-		DL_getAt(&gameState->blockList,i,&tmpBlock);
+		DL_getAt(&gameState->blockList, i, &tmpBlock);
 
-		if (twoBlockAreOverlapping(block,tmpBlock)){
+		if (twoBlockAreOverlapping(block, tmpBlock)){
 			overLapCount++;
 		}
 	}
 
+	// Checking for overlap in the environement block list
 	for(i = 0;i < gameState->envBlockList.count;i++) {
 		Block *tmpBlock;
-		DL_getAt(&gameState->envBlockList,i,&tmpBlock);
+		DL_getAt(&gameState->envBlockList, i, &tmpBlock);
 
-		if (twoBlockAreOverlapping(block,tmpBlock)){
+		if (twoBlockAreOverlapping(block, tmpBlock)){
 			overLapCount++;
 		}
 	}
@@ -35,31 +38,36 @@ static bool thereIsColision(GameState *gameState, Block *block) {
 	return false;
 }
 
-static bool shapeColliding(GameState *gameState) {
-	
-	return thereIsColision(gameState,gameState->tetrisBlk.blockA) ||
-			thereIsColision(gameState,gameState->tetrisBlk.blockB) ||
-			thereIsColision(gameState,gameState->tetrisBlk.blockC) ||
-			thereIsColision(gameState,gameState->tetrisBlk.blockD);
+static bool shapeColliding(GameState *gameState) 
+{
+	return thereIsColision(gameState, gameState->tetrisBlk.blockA) ||
+		   thereIsColision(gameState, gameState->tetrisBlk.blockB) ||
+		   thereIsColision(gameState, gameState->tetrisBlk.blockC) ||
+		   thereIsColision(gameState, gameState->tetrisBlk.blockD);
 }
 
-static int computedRelXOffset(Uint32 i) {
+static int computedRelXOffset(Uint32 i) 
+{
 	return i * G_GameConfig.blockSize;
 }
 
-static int computedRelYOffset(Uint32 j) {
+static int computedRelYOffset(Uint32 j) 
+{
 	return j * G_GameConfig.blockSize;
 }
 
-static Uint32 computeXFromIndex(Uint32 i) {
-	return G_GameConfig.gridLeftPadding + i * G_GameConfig.blockSize;
+static int computeXFromIndex(Uint32 i) 
+{
+	return G_GameConfig.gridLeftPadding + (i * G_GameConfig.blockSize);
 }
 
-static Uint32 computeYFromIndex(Uint32 j) {
-	return G_GameConfig.gridTopPadding + j * G_GameConfig.blockSize;
+static int computeYFromIndex(Uint32 j) 
+{
+	return G_GameConfig.gridTopPadding + (j * G_GameConfig.blockSize);
 }
 
-static Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+static Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a) 
+{
 	Block *block = malloc(sizeof(Block));
 	
 	assert(block != NULL);
@@ -75,32 +83,23 @@ static Block* createBlock(Uint32 x, Uint32 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	return block;	
 }
 
-static Block* createBlockAt(Uint32 i, Uint32 j, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-
-	if (i > G_GameConfig.numberOfColumns || j > G_GameConfig.numberOfRows) {
-		fprintf(stderr, "Critical: Cannot create block at ,%d %d in grid\n", i, j);
-		//exit(1);
-	}
-
+static Block* createBlockAt(Uint32 i, Uint32 j, Uint8 r, Uint8 g, Uint8 b, Uint8 a) 
+{
 	Uint32 calcXPos = computeXFromIndex(i);
 	Uint32 calcYPos = computeYFromIndex(j);
 
 	return createBlock(calcXPos, calcYPos, r, g, b , a);
 }
 
-static void generateWalls(GameState *gameState) {
-
+static void generateWalls(GameState *gameState) 
+{
 	assert(gameState != NULL);
 	int i;
 	
 	// Generate left wall
 	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
 
-		Block *newBlock = createBlockAt(0, i
-					     		 		 , 128
-					     		 		 , 128
-					     		 		 , 128
-					     		 		 , 1);
+		Block *newBlock = createBlockAt(-1, i, 128, 128, 128, 1);
 
 		DL_push(&gameState->envBlockList, &newBlock);
 	}
@@ -108,11 +107,11 @@ static void generateWalls(GameState *gameState) {
 	// Generate right wall
 	for(i = 0; i < G_GameConfig.numberOfRows; i++) {
 
-		Block *newBlock = createBlockAt(G_GameConfig.numberOfColumns + 1, i
-					     		 							   	 	    , 128
-					     		 							   	 	    , 128
-					     		 							   	 	    , 128
-					     		 							   	 	    , 1);
+		Block *newBlock = createBlockAt(G_GameConfig.numberOfColumns, i
+					     		 							   	 	, 128
+					     		 							   	 	, 128
+					     		 							   	 	, 128
+					     		 							   	 	, 1);
 		
 		DL_push(&gameState->envBlockList, &newBlock);
 	}
@@ -120,7 +119,7 @@ static void generateWalls(GameState *gameState) {
 	// Generate bottom wall
 	for(i = 0; i <= G_GameConfig.numberOfColumns + 1; i++) {
 
-		Block *newBlock = createBlockAt(i, G_GameConfig.numberOfRows, 128
+		Block *newBlock = createBlockAt(i-1, G_GameConfig.numberOfRows, 128
 					     	  		   								  , 128
 					     	  		   								  , 128
 				     		  		   								  , 1);
@@ -129,43 +128,53 @@ static void generateWalls(GameState *gameState) {
 	}
 }
 
-static void removeLine(GameState *gameState, int j) {
+static void removeLine(GameState *gameState, int lineIndex) 
+{
 	int i;
-	for (i = 0;i <= gameState->blockList.count+1;i++) {
-
+	for (i = 0;i < gameState->blockList.count;i++) {
 		Block *tmpBlock = NULL;
-		DL_getAt(&gameState->blockList,i,&tmpBlock);
+		DL_getAt(&gameState->blockList, i, &tmpBlock);
 
-		if (tmpBlock->y == computeYFromIndex(j)) {
-			DL_removeAt(&gameState->blockList,i);
-			i--;
+		if (tmpBlock->y == computeYFromIndex(lineIndex)) {
+			DL_removeAt(&gameState->blockList, i);
+			if (i != (gameState->blockList.count - 1))
+				i--;
 		}
 	}
 }
 
-static bool blockIsAt(GameState *gameState, int i, int j) {
+static bool blockIsAt(GameState *gameState, int i, int j) 
+{
 
 	int k;
-	//fprintf(stderr, "start for \n");
 	for (k = 0;k < gameState->blockList.count;k++) {
 
 		Block *tmpBlock = NULL;
 		DL_getAt(&gameState->blockList, k, &tmpBlock);
-
-		//fprintf(stderr, "Block x=%d y=%d \n", tmpBlock->x,tmpBlock->y);
-		//fprintf(stderr, "computed Block x=%d y=%d \n", computeXFromIndex(i), computeYFromIndex(j));
-		//fprintf(stderr, "== \n");
 
 		if (tmpBlock->x == computeXFromIndex(i) && tmpBlock->y == computeYFromIndex(j)) {
 			return true;
 		}
 	}
 
-	//fprintf(stderr, "end for \n");
 	return false;
 }
 
-void initialiseGameScene(GameState *gameState) {
+static void dropLines(GameState *gameState, int lineIndex) 
+{
+	int i;
+	for (i = 0;i < gameState->blockList.count;i++) {
+		Block *tmpBlock = NULL;
+		DL_getAt(&gameState->blockList, i, &tmpBlock);
+
+		if (tmpBlock->y < computeYFromIndex(lineIndex)) {
+			tmpBlock->y = tmpBlock->y + G_GameConfig.blockSize;
+		}
+	}
+}
+
+void initialiseGameScene(GameState *gameState) 
+{
 		assert(gameState != NULL);
 
 		generateWalls(gameState);
@@ -175,10 +184,8 @@ void initialiseGameScene(GameState *gameState) {
 
 // [y −x] rotation - 90
 // [-y x] rotation 90
-void rotateShape(GameState *gameState) {
-
-	fprintf(stderr, "Inside Rotation \n");
-
+void rotateShape(GameState *gameState) 
+{
 	int translationVector[2];
 	Point blockAPoint, blockBPoint, blockCPoint, blockDPoint;
 
@@ -257,12 +264,10 @@ void rotateShape(GameState *gameState) {
 	}
 }
 
-void eraseFullLines(GameState *gameState) {
-	fprintf(stderr, "ereasing full lines\n");
-	int j,i;
-	fprintf(stderr, "number of rows : %d \n",G_GameConfig.numberOfRows);
-	fprintf(stderr, "number of columns : %d \n",G_GameConfig.numberOfColumns);
-
+void eraseFullLines(GameState *gameState) 
+{
+	int j, i;
+	
 	for(j = 0;j < G_GameConfig.numberOfRows;j++) {
 
 		bool lineIsFull = true;
@@ -274,15 +279,15 @@ void eraseFullLines(GameState *gameState) {
 		}
 
 		if (lineIsFull) {
-			fprintf(stderr, "Line is full\n");
-			//removeLine(gameState,j);
-			//j--;
+			removeLine(gameState, j);
+			dropLines(gameState, j);
+			j--;
 		}
 	}
 }
 
-bool spawnTetrisShp(GameState *gameState) {
-
+bool spawnTetrisShp(GameState *gameState) 
+{
 	int r = rand() % 7;
 	
 	Uint32 centerCoord = G_GameConfig.numberOfColumns / 2;
@@ -366,7 +371,8 @@ bool spawnTetrisShp(GameState *gameState) {
 		return true;
 }
 
-bool moveShape(GameState *gameState, Direction direction) {
+bool moveShape(GameState *gameState, Direction direction) 
+{
 
 	int OldXArray[4];
 	int OldYArray[4];
@@ -423,9 +429,9 @@ bool moveShape(GameState *gameState, Direction direction) {
 	return true;
 }
 
-void dropShape(GameState *gameState) {
-	
-	while (moveShape(gameState,down)) {	
+void dropShape(GameState *gameState) 
+{
+	while (moveShape(gameState, down)) {	
 
 	}
 

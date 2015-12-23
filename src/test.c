@@ -14,7 +14,7 @@ void createListOnHeapTest()
 {
 	void *list = malloc(sizeof(DynamicList));
 
-        DL_initialize(list,sizeof(int),NULL,10);  
+    DL_initialize(list, sizeof(int), NULL, 10);  
 	
 	int i;
 	for (i = 0; i <= 41; i++){
@@ -29,10 +29,10 @@ void createListOnHeapTest()
 void createListOnStackTest()
 {
 	DynamicList list;    
-        DL_initialize(&list,sizeof(int),NULL,10);  
+    DL_initialize(&list, sizeof(int), NULL, 10);  
 	
 	int i;
-	for (i = 0; i <= 11; i++){
+	for (i = 0; i <= 11; i++) {
 		DL_push(&list,&i);	
 	}
 
@@ -40,11 +40,13 @@ void createListOnStackTest()
 	DL_deleteList(&list);
 }
 
-void runListTests(){
+void runListTests()
+{
 	createListOnStackTest();
 	createListOnHeapTest();
 }	
 
-void runTests(){
+void runTests()
+{
 	runListTests();
 }
